@@ -1,14 +1,14 @@
 # Hamba — Moves & Removals
 
-A mobile web app (installable PWA) for booking **long-distance moves**, **local removals** and **rubble removal** — with in-app card payment for all SA banks. Designed in an Apple "liquid glass" style with a morphing **Dynamic Island** at the top that shows your live quote, payment status and driver tracking.
+A mobile web app (installable PWA) for booking **long-distance moves**, **local removals** and **rubble removal** — with in-app card payment for all SA banks. A minimal **black-and-white** interface built on an Apple "liquid glass" material with soft, animated lighting.
 
 > *Hamba* — "go" in Zulu/Xhosa.
 
 ## What's in it
 
 - **Pick a service** — Long Distance Move, Local Removal, or Rubble Removal.
-- **Build the booking** — pickup & drop-off, date/time, load size, helpers, notes. A **live quote** updates in the Dynamic Island as you type.
-- **Pay** — Tap-to-pay (card machine), Card, or Instant EFT. Itemised receipt with VAT.
+- **Build the booking** — pickup & drop-off, date/time, load size, helpers, notes. A **live quote** updates as you type.
+- **Pay** — Tap-to-pay (card machine), Card, or Instant EFT, with a frosted processing overlay and an itemised receipt incl. VAT.
 - **Track** — animated confirmation, route map and live status steps.
 - **Installable** — "Add to Home Screen" on iPhone/Android; runs full-screen like a native app, works offline.
 
@@ -30,11 +30,12 @@ npm run preview  # preview the production build
 
 - **React + TypeScript + Vite**
 - **vite-plugin-pwa** for the installable / offline app shell
-- Pure CSS liquid-glass design system (`src/styles.css`) — `backdrop-filter` glass, ambient orbs, the Dynamic Island morph animations
+- Pure CSS liquid-glass design system (`src/styles.css`) — monochrome palette, `backdrop-filter` glass, soft animated ambient lighting
 
 ```
 src/
-  components/DynamicIsland.tsx   morphing notch pill (idle → quote → paying → tracking)
+  components/Icon.tsx             monochrome SF Symbols-style line icons
+  components/ProcessingOverlay.tsx frosted payment-processing overlay
   screens/Home.tsx               service picker
   screens/Booking.tsx            address / date / load / helpers + live quote
   screens/Payment.tsx            method picker + Yoco-style tap flow + receipt

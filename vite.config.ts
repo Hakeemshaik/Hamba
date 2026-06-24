@@ -13,8 +13,8 @@ export default defineConfig({
         name: 'Hamba — Moves & Removals',
         short_name: 'Hamba',
         description: 'Book long-distance moves, local removals and rubble removal.',
-        theme_color: '#0a0a0f',
-        background_color: '#0a0a0f',
+        theme_color: '#000000',
+        background_color: '#000000',
         display: 'standalone',
         orientation: 'portrait',
         icons: [
