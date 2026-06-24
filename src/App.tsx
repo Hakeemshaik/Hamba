@@ -44,11 +44,6 @@ export default function App() {
 
   return (
     <div className="app">
-      <div className="bg-orbs" aria-hidden>
-        <span className="orb orb-1" />
-        <span className="orb orb-2" />
-      </div>
-
       <ProcessingOverlay label={processing} />
 
       <main className="app-main">

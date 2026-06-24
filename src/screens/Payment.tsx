@@ -3,6 +3,7 @@ import { formatZar, calculateQuote } from '../lib/quote'
 import { serviceById, loadById } from '../lib/data'
 import type { Booking, PaymentMethod, Quote } from '../lib/types'
 import Icon from '../components/Icon'
+import Illustration from '../components/Illustration'
 
 interface Props {
   booking: Booking
@@ -12,7 +13,7 @@ interface Props {
 }
 
 const METHODS: { id: PaymentMethod; label: string; sub: string; icon: string }[] = [
-  { id: 'tap', label: 'Tap to pay', sub: 'Card machine · all banks', icon: 'contactless' },
+  { id: 'tap', label: 'Tap to pay', sub: 'Card machine · all banks', icon: 'tap' },
   { id: 'card', label: 'Card', sub: 'Visa · Mastercard · Amex', icon: 'card' },
   { id: 'eft', label: 'Instant EFT', sub: 'Pay from your bank app', icon: 'bank' },
 ]
@@ -48,7 +49,7 @@ export default function Payment({ booking, onBack, onPaid, setProcessing }: Prop
 
       <div className="glass receipt">
         <div className="receipt-head">
-          <span className="receipt-icon"><Icon name={service?.icon ?? 'box'} /></span>
+          <span className="receipt-icon"><Illustration name={service?.icon ?? 'boxes'} /></span>
           <div>
             <div className="receipt-title">{service?.name}</div>
             <div className="receipt-sub">{load?.label} load · {Math.round(booking.distanceKm)} km</div>
@@ -75,7 +76,7 @@ export default function Payment({ booking, onBack, onPaid, setProcessing }: Prop
             className={`glass method-card ${method === m.id ? 'method-card--on' : ''}`}
             onClick={() => setMethod(m.id)}
           >
-            <span className="method-icon"><Icon name={m.icon} /></span>
+            <span className="method-icon"><Illustration name={m.icon} /></span>
             <span className="method-text">
               <span className="method-label">{m.label}</span>
               <span className="method-sub">{m.sub}</span>

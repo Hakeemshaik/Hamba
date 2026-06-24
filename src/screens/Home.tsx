@@ -1,6 +1,7 @@
 import { SERVICES } from '../lib/data'
 import type { ServiceId } from '../lib/types'
 import Icon from '../components/Icon'
+import Illustration from '../components/Illustration'
 
 interface Props {
   onSelect: (id: ServiceId) => void
@@ -23,11 +24,11 @@ export default function Home({ onSelect }: Props) {
           <button
             key={s.id}
             className="glass service-card"
-            style={{ animationDelay: `${i * 70}ms` }}
+            style={{ animationDelay: `${i * 70}ms`, ['--tile' as string]: s.accent }}
             onClick={() => onSelect(s.id)}
           >
             <span className="service-icon" aria-hidden>
-              <Icon name={s.icon} />
+              <Illustration name={s.icon} />
             </span>
             <span className="service-text">
               <span className="service-name">{s.name}</span>
