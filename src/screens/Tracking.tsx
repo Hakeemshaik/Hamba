@@ -1,5 +1,6 @@
 import { serviceById } from '../lib/data'
 import type { Booking, PaymentMethod } from '../lib/types'
+import Icon from '../components/Icon'
 
 interface Props {
   booking: Booking
@@ -16,7 +17,7 @@ export default function Tracking({ booking, method, onDone }: Props) {
   return (
     <div className="screen">
       <div className="confirm-burst">
-        <div className="confirm-check">✓</div>
+        <div className="confirm-check"><Icon name="check" /></div>
         <h2 className="confirm-title">You're booked!</h2>
         <p className="confirm-sub">
           {service?.name} · {booking.date || 'soon'} {booking.time}
@@ -26,10 +27,10 @@ export default function Tracking({ booking, method, onDone }: Props) {
       <div className="glass map-card">
         <div className="map-grid" />
         <div className="map-route">
-          <span className="pin pin-a">A</span>
+          <span className="pin pin-a"><Icon name="pin" /></span>
           <span className="route-line" />
-          <span className="truck-moving">🚚</span>
-          <span className="pin pin-b">B</span>
+          <span className="truck-moving"><Icon name="truck" /></span>
+          <span className="pin pin-b"><Icon name="pin" /></span>
         </div>
         <div className="map-foot">
           <span>{booking.pickup || 'Pickup'}</span>
@@ -42,7 +43,7 @@ export default function Tracking({ booking, method, onDone }: Props) {
           <div key={s} className={`step ${i <= 1 ? 'step--done' : ''}`}>
             <span className="step-dot" />
             <span className="step-label">{s}</span>
-            {i <= 1 && <span className="step-tick">✓</span>}
+            {i <= 1 && <span className="step-tick"><Icon name="check" /></span>}
           </div>
         ))}
       </div>

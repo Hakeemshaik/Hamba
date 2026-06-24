@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { formatZar, calculateQuote } from '../lib/quote'
 import { serviceById, loadById } from '../lib/data'
 import type { Booking, PaymentMethod, Quote } from '../lib/types'
+import Icon from '../components/Icon'
 
 interface Props {
   booking: Booking
@@ -11,9 +12,9 @@ interface Props {
 }
 
 const METHODS: { id: PaymentMethod; label: string; sub: string; icon: string }[] = [
-  { id: 'tap', label: 'Tap to pay', sub: 'Card machine · all banks', icon: '📟' },
-  { id: 'card', label: 'Card', sub: 'Visa · Mastercard · Amex', icon: '💳' },
-  { id: 'eft', label: 'Instant EFT', sub: 'Pay from your bank app', icon: '🏦' },
+  { id: 'tap', label: 'Tap to pay', sub: 'Card machine · all banks', icon: 'contactless' },
+  { id: 'card', label: 'Card', sub: 'Visa · Mastercard · Amex', icon: 'card' },
+  { id: 'eft', label: 'Instant EFT', sub: 'Pay from your bank app', icon: 'bank' },
 ]
 
 export default function Payment({ booking, onBack, onPaid, setProcessing }: Props) {
@@ -38,14 +39,16 @@ export default function Payment({ booking, onBack, onPaid, setProcessing }: Prop
   return (
     <div className="screen">
       <div className="topbar">
-        <button className="ghost-btn" onClick={onBack} aria-label="Back">‹</button>
+        <button className="ghost-btn" onClick={onBack} aria-label="Back">
+          <Icon name="back" />
+        </button>
         <span className="topbar-title">Payment</span>
         <span style={{ width: 36 }} />
       </div>
 
       <div className="glass receipt">
         <div className="receipt-head">
-          <span className="receipt-icon">{service?.icon}</span>
+          <span className="receipt-icon"><Icon name={service?.icon ?? 'box'} /></span>
           <div>
             <div className="receipt-title">{service?.name}</div>
             <div className="receipt-sub">{load?.label} load · {Math.round(booking.distanceKm)} km</div>
@@ -72,7 +75,7 @@ export default function Payment({ booking, onBack, onPaid, setProcessing }: Prop
             className={`glass method-card ${method === m.id ? 'method-card--on' : ''}`}
             onClick={() => setMethod(m.id)}
           >
-            <span className="method-icon">{m.icon}</span>
+            <span className="method-icon"><Icon name={m.icon} /></span>
             <span className="method-text">
               <span className="method-label">{m.label}</span>
               <span className="method-sub">{m.sub}</span>
@@ -90,7 +93,7 @@ export default function Payment({ booking, onBack, onPaid, setProcessing }: Prop
       )}
 
       <div className="sticky-cta">
-        <p className="secure-note">🔒 Secured by Yoco · all SA banks accepted</p>
+        <p className="secure-note">Secured by Yoco · all SA banks accepted</p>
         <button className="primary-btn" onClick={pay}>
           Pay {formatZar(quote.total)}
         </button>

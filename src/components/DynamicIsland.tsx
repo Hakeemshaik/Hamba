@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Icon from './Icon'
 
 export type IslandState =
   | { kind: 'idle' }
@@ -56,7 +57,7 @@ export default function DynamicIsland({ state }: Props) {
 
         {state.kind === 'success' && (
           <div className="island-row">
-            <span className="island-check">✓</span>
+            <span className="island-check"><Icon name="check" /></span>
             <div className="island-trail island-processing-label">{state.label}</div>
           </div>
         )}
@@ -65,7 +66,7 @@ export default function DynamicIsland({ state }: Props) {
           <div className="island-track">
             <div className="island-row">
               <div className="island-lead">
-                <span className="island-truck">🚚</span>
+                <span className="island-truck"><Icon name="truck" /></span>
                 <div>
                   <div className="island-mini-label">{state.status}</div>
                   <div className="island-mini-sub">ETA {state.eta}</div>

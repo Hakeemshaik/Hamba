@@ -1,6 +1,7 @@
 import { LOAD_OPTIONS, serviceById } from '../lib/data'
 import { formatZar, calculateQuote } from '../lib/quote'
 import type { Booking as BookingT, LoadSize } from '../lib/types'
+import Icon from '../components/Icon'
 
 interface Props {
   booking: BookingT
@@ -21,7 +22,9 @@ export default function Booking({ booking, update, onBack, onContinue }: Props) 
   return (
     <div className="screen">
       <div className="topbar">
-        <button className="ghost-btn" onClick={onBack} aria-label="Back">‹</button>
+        <button className="ghost-btn" onClick={onBack} aria-label="Back">
+          <Icon name="back" />
+        </button>
         <span className="topbar-title">{service?.name}</span>
         <span style={{ width: 36 }} />
       </div>
@@ -79,8 +82,10 @@ export default function Booking({ booking, update, onBack, onContinue }: Props) 
               className={`glass load-card ${booking.load === l.id ? 'load-card--on' : ''}`}
               onClick={() => update({ load: l.id as LoadSize })}
             >
-              <span className="load-icon">{l.icon}</span>
-              <span className="load-label">{l.label}</span>
+              <span className="load-top">
+                <span className="load-label">{l.label}</span>
+                {booking.load === l.id && <span className="load-check"><Icon name="check" /></span>}
+              </span>
               <span className="load-detail">{l.detail}</span>
             </button>
           ))}
