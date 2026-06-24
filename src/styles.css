@@ -298,6 +298,73 @@ svg { display: block; width: 100%; height: 100%; }
 .paid-card { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; font-size: 14px; }
 .paid-badge { font-size: 12px; font-weight: 600; color: var(--text); background: rgba(0, 0, 0, 0.06); padding: 5px 10px; border-radius: 10px; }
 
+/* ---------- App bar (home) ---------- */
+.app-bar { display: flex; align-items: baseline; gap: 10px; padding: 2px 2px 2px; }
+.wordmark { font-size: 20px; font-weight: 750; letter-spacing: -0.03em; }
+.app-bar-tag { font-size: 12px; color: var(--muted); font-weight: 550; }
+
+/* ---------- Group labels (section headings) ---------- */
+.group-label {
+  font-size: 13px; font-weight: 650; letter-spacing: -0.01em;
+  color: var(--text); margin: 2px 2px -7px;
+}
+
+/* ---------- Step header + progress ---------- */
+.step-header { display: flex; flex-direction: column; gap: 16px; }
+.ghost-spacer { width: 36px; flex: none; }
+
+.progress { display: flex; align-items: center; gap: 6px; }
+.progress-step { display: flex; align-items: center; gap: 7px; }
+.progress-step:not(:last-child)::after {
+  content: ''; width: 16px; height: 2px; border-radius: 2px;
+  background: var(--stroke); margin-left: 1px;
+}
+.progress-step--done:not(:last-child)::after { background: var(--text); }
+.progress-dot {
+  width: 22px; height: 22px; border-radius: 50%; flex: none;
+  display: grid; place-items: center; padding: 5px;
+  font-size: 12px; font-weight: 650;
+  background: rgba(0, 0, 0, 0.06); color: var(--muted);
+  border: 1px solid transparent;
+}
+.progress-step--active .progress-dot { background: var(--text); color: #fff; }
+.progress-step--done .progress-dot { background: var(--text); color: #fff; }
+.progress-label { font-size: 12.5px; font-weight: 550; color: var(--muted); }
+.progress-step--active .progress-label { color: var(--text); }
+.progress-step--todo .progress-label { display: none; }
+.progress-step--done .progress-label { display: none; }
+
+/* ---------- Form fields with leading marker ---------- */
+.field--icon { flex-direction: row; align-items: center; gap: 12px; }
+.field-marker {
+  width: 26px; height: 26px; border-radius: 50%; flex: none;
+  display: grid; place-items: center; padding: 5px; color: #fff;
+}
+.field-marker--a { background: #111316; }
+.field-marker--b { background: #6b7280; }
+.field-body { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+
+/* ---------- Confirmation reference + ETA ---------- */
+.ref-chip {
+  display: inline-block; margin-top: 12px;
+  font-size: 12.5px; font-weight: 600; letter-spacing: 0.02em;
+  color: var(--text); background: rgba(0, 0, 0, 0.06);
+  padding: 6px 12px; border-radius: 11px;
+}
+.map-eta {
+  position: absolute; top: 14px; left: 14px; z-index: 2;
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12.5px; font-weight: 600; color: var(--text);
+  background: var(--glass-strong); border: 1px solid rgba(255, 255, 255, 0.7);
+  padding: 6px 11px 6px 9px; border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(17, 24, 39, 0.1);
+}
+.map-eta svg { width: 15px; height: 15px; flex: none; }
+.step--active .step-dot { background: var(--text); box-shadow: 0 0 0 4px rgba(17, 19, 22, 0.12); }
+.step--active .step-label { color: var(--text); font-weight: 600; }
+
+.stepper button:disabled { opacity: 0.32; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }

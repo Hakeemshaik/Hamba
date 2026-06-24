@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { formatZar, calculateQuote } from '../lib/quote'
 import { serviceById, loadById } from '../lib/data'
 import type { Booking, PaymentMethod, Quote } from '../lib/types'
-import Icon from '../components/Icon'
 import Illustration from '../components/Illustration'
+import StepHeader from '../components/StepHeader'
 
 interface Props {
   booking: Booking
@@ -39,14 +39,9 @@ export default function Payment({ booking, onBack, onPaid, setProcessing }: Prop
 
   return (
     <div className="screen">
-      <div className="topbar">
-        <button className="ghost-btn" onClick={onBack} aria-label="Back">
-          <Icon name="back" />
-        </button>
-        <span className="topbar-title">Payment</span>
-        <span style={{ width: 36 }} />
-      </div>
+      <StepHeader step={2} title="Payment" onBack={onBack} />
 
+      <p className="group-label">Order summary</p>
       <div className="glass receipt">
         <div className="receipt-head">
           <span className="receipt-icon"><Illustration name={service?.icon ?? 'boxes'} /></span>
@@ -68,7 +63,7 @@ export default function Payment({ booking, onBack, onPaid, setProcessing }: Prop
         </div>
       </div>
 
-      <div className="section-label">Pay with</div>
+      <p className="group-label">Pay with</p>
       <div className="method-list">
         {METHODS.map((m) => (
           <button
