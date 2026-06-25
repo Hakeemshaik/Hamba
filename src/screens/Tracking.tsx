@@ -39,7 +39,7 @@ export default function Tracking({ booking, method, onDone }: Props) {
         <div className="map-grid" />
         <div className="map-eta">
           <Icon name="clock" />
-          <span>Arriving in ~18 min</span>
+          <span>Live tracking once a driver accepts</span>
         </div>
         <div className="map-route">
           <span className="pin pin-a"><Icon name="pin" /></span>
@@ -59,10 +59,10 @@ export default function Tracking({ booking, method, onDone }: Props) {
       <p className="group-label">Status</p>
       <div className="glass steps-card">
         {STEPS.map((s, i) => (
-          <div key={s} className={`step ${i <= 1 ? 'step--done' : ''} ${i === 2 ? 'step--active' : ''}`}>
+          <div key={s} className={`step ${i === 0 ? 'step--done' : ''} ${i === 1 ? 'step--active' : ''}`}>
             <span className="step-dot" />
             <span className="step-label">{s}</span>
-            {i <= 1 && <span className="step-tick"><Icon name="check" /></span>}
+            {i === 0 && <span className="step-tick"><Icon name="check" /></span>}
           </div>
         ))}
       </div>

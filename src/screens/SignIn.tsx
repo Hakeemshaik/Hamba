@@ -27,7 +27,7 @@ export default function SignIn({ onSignIn }: Props) {
           <span className="field-label">Full name</span>
           <input
             className="field-input"
-            placeholder="e.g. Lerato Khumalo"
+            placeholder="Your full name"
             autoComplete="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -39,7 +39,7 @@ export default function SignIn({ onSignIn }: Props) {
             className="field-input"
             type="tel"
             inputMode="tel"
-            placeholder="+27 82 000 0000"
+            placeholder="Mobile number"
             autoComplete="tel"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
@@ -51,7 +51,7 @@ export default function SignIn({ onSignIn }: Props) {
             className="field-input"
             type="email"
             inputMode="email"
-            placeholder="you@email.co.za"
+            placeholder="Email address"
             autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}

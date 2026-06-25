@@ -128,7 +128,7 @@ export default function Booking({ booking, update, recents, onBack, onContinue }
           <span className="field-label">Notes for the driver (optional)</span>
           <textarea
             className="field-input field-textarea"
-            placeholder="Stairs, fragile items, gate codes…"
+            placeholder="Stairs, fragile items, parking access…"
             value={booking.notes}
             onChange={(e) => update({ notes: e.target.value })}
           />

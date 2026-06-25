@@ -32,19 +32,19 @@ export default function EditProfile({ profile, onBack, onSave }: Props) {
       <div className="form-stack">
         <label className="glass field-group">
           <span className="field-label">Full name</span>
-          <input className="field-input" placeholder="e.g. Lerato Khumalo" value={form.name} onChange={(e) => set({ name: e.target.value })} />
+          <input className="field-input" placeholder="Your full name" value={form.name} onChange={(e) => set({ name: e.target.value })} />
         </label>
         <label className="glass field-group">
           <span className="field-label">Mobile number</span>
-          <input className="field-input" type="tel" inputMode="tel" placeholder="+27 82 000 0000" value={form.phone} onChange={(e) => set({ phone: e.target.value })} />
+          <input className="field-input" type="tel" inputMode="tel" placeholder="Mobile number" value={form.phone} onChange={(e) => set({ phone: e.target.value })} />
         </label>
         <label className="glass field-group">
           <span className="field-label">Email</span>
-          <input className="field-input" type="email" inputMode="email" placeholder="you@email.co.za" value={form.email} onChange={(e) => set({ email: e.target.value })} />
+          <input className="field-input" type="email" inputMode="email" placeholder="Email address" value={form.email} onChange={(e) => set({ email: e.target.value })} />
         </label>
         <label className="glass field-group">
           <span className="field-label">Default pickup address</span>
-          <input className="field-input" placeholder="Street, suburb, city" value={form.address} onChange={(e) => set({ address: e.target.value })} />
+          <input className="field-input" placeholder="Suburb or area" value={form.address} onChange={(e) => set({ address: e.target.value })} />
         </label>
       </div>
 
