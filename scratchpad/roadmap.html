@@ -1,0 +1,454 @@
+<style>
+  .rm {
+    --paper: #f4f5f2;
+    --card: #ffffff;
+    --ink: #14171a;
+    --slate: #555d63;
+    --faint: #8b9197;
+    --line: rgba(20, 23, 26, 0.10);
+    --go: #16855a;
+    --go-soft: rgba(22, 133, 90, 0.10);
+    --block: #c0392b;
+    --watch: #b7791f;
+    --mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    font-size: 17px;
+  }
+  .rm * { box-sizing: border-box; }
+  .rm-wrap {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+    animation: rm-in 0.6s ease both;
+  }
+  @keyframes rm-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .rm-wrap { animation: none; } }
+
+  .rm-eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--go);
+    font-weight: 600;
+  }
+  .rm-wordmark { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
+  .rm-masthead {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 16px; padding-bottom: 14px; margin-bottom: 30px;
+    border-bottom: 1px solid var(--line);
+  }
+  .rm-masthead .rm-eyebrow { color: var(--faint); }
+
+  h1.rm-title {
+    font-size: clamp(2rem, 6vw, 2.9rem);
+    line-height: 1.04; font-weight: 820; letter-spacing: -0.035em;
+    text-wrap: balance; margin: 18px 0 14px;
+  }
+  .rm-lede { font-size: 1.15rem; color: var(--slate); max-width: 60ch; }
+
+  .rm-northstar {
+    margin: 30px 0; padding: 22px 24px;
+    background: var(--ink); color: #f3f5f4;
+    border-radius: 16px;
+  }
+  .rm-northstar .rm-kicker { color: #7fd3ad; }
+  .rm-kicker {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--go); font-weight: 600;
+    display: block; margin-bottom: 10px;
+  }
+  .rm-northstar p { font-size: 1.18rem; line-height: 1.45; font-weight: 500; letter-spacing: -0.01em; }
+
+  section.rm-sec { margin-top: 48px; }
+  h2.rm-h2 {
+    font-size: 1.5rem; font-weight: 760; letter-spacing: -0.022em;
+    text-wrap: balance; margin-bottom: 6px;
+  }
+  .rm-sub { color: var(--slate); margin-bottom: 22px; max-width: 64ch; }
+
+  /* Featured verdict */
+  .rm-verdict {
+    border: 1px solid var(--line); border-left: 4px solid var(--go);
+    background: var(--card); border-radius: 14px; padding: 24px 26px;
+  }
+  .rm-verdict h3 { font-size: 1.25rem; font-weight: 740; letter-spacing: -0.02em; margin-bottom: 10px; }
+  .rm-verdict p { color: var(--slate); }
+  .rm-verdict p + p { margin-top: 12px; }
+  .rm-verdict strong { color: var(--ink); }
+  .rm-steps {
+    list-style: none; padding: 0; margin: 18px 0 0;
+    display: grid; gap: 10px;
+  }
+  .rm-steps li {
+    display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start;
+    font-size: 0.96rem;
+  }
+  .rm-steps .rm-n {
+    font-family: var(--mono); font-size: 12px; font-weight: 700;
+    color: var(--go); background: var(--go-soft);
+    width: 24px; height: 24px; border-radius: 7px;
+    display: grid; place-items: center; margin-top: 1px;
+  }
+
+  /* Phase timeline */
+  .rm-timeline { position: relative; padding-left: 30px; }
+  .rm-timeline::before {
+    content: ""; position: absolute; left: 9px; top: 6px; bottom: 6px;
+    width: 2px; background: var(--line);
+  }
+  .rm-phase { position: relative; padding-bottom: 30px; }
+  .rm-phase:last-child { padding-bottom: 0; }
+  .rm-phase::before {
+    content: ""; position: absolute; left: -30px; top: 3px;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--card); border: 2px solid var(--go);
+  }
+  .rm-phase[data-now]::before { background: var(--go); }
+  .rm-phase-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 14px; }
+  .rm-phase-head h3 { font-size: 1.18rem; font-weight: 740; letter-spacing: -0.02em; }
+  .rm-when {
+    font-family: var(--mono); font-size: 12px; color: var(--slate);
+    background: rgba(20,23,26,0.05); padding: 3px 9px; border-radius: 7px; white-space: nowrap;
+  }
+  .rm-goal { color: var(--slate); margin: 8px 0 12px; }
+  .rm-deliv { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .rm-deliv li { position: relative; padding-left: 20px; font-size: 0.95rem; }
+  .rm-deliv li::before {
+    content: ""; position: absolute; left: 2px; top: 9px;
+    width: 7px; height: 7px; border-radius: 2px; background: var(--go); opacity: 0.5;
+  }
+
+  /* Windows (90 day) */
+  .rm-windows { display: grid; gap: 14px; }
+  @media (min-width: 680px) { .rm-windows { grid-template-columns: repeat(3, 1fr); } }
+  .rm-win { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+  .rm-win .rm-day { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--go); }
+  .rm-win h4 { font-size: 1rem; font-weight: 700; margin: 6px 0 10px; letter-spacing: -0.01em; }
+  .rm-win ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 7px; }
+  .rm-win li { font-size: 0.86rem; color: var(--slate); padding-left: 14px; position: relative; }
+  .rm-win li::before { content: "→"; position: absolute; left: 0; color: var(--go); font-family: var(--mono); }
+
+  /* Economics card */
+  .rm-econ { background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .rm-econ-row {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
+    padding: 13px 20px; border-bottom: 1px solid var(--line); font-size: 0.95rem;
+  }
+  .rm-econ-row:last-child { border-bottom: none; }
+  .rm-econ-row .rm-amt { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+  .rm-econ-row.rm-emph { background: var(--go-soft); }
+  .rm-econ-row.rm-emph .rm-amt { color: var(--go); }
+  .rm-econ-row .rm-lbl { color: var(--slate); }
+  .rm-econ-foot { padding: 14px 20px; font-size: 0.85rem; color: var(--slate); background: rgba(20,23,26,0.025); }
+
+  /* KPI table */
+  .rm-tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--card); }
+  table.rm-kpi { width: 100%; border-collapse: collapse; font-size: 0.92rem; min-width: 460px; }
+  .rm-kpi th, .rm-kpi td { text-align: left; padding: 12px 18px; border-bottom: 1px solid var(--line); }
+  .rm-kpi th { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); font-weight: 600; }
+  .rm-kpi tr:last-child td { border-bottom: none; }
+  .rm-kpi td.rm-target { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 600; white-space: nowrap; }
+
+  /* Revenue */
+  .rm-rev { display: grid; gap: 10px; }
+  .rm-rev-item { display: grid; grid-template-columns: 1fr auto; gap: 6px 16px; align-items: baseline; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; }
+  .rm-rev-item h4 { font-size: 0.98rem; font-weight: 650; }
+  .rm-rev-item .rm-when2 { font-family: var(--mono); font-size: 11px; color: var(--go); white-space: nowrap; }
+  .rm-rev-item p { grid-column: 1 / -1; font-size: 0.86rem; color: var(--slate); }
+
+  /* Risks */
+  .rm-risks { display: grid; gap: 12px; }
+  .rm-risk { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; border-left: 4px solid var(--faint); }
+  .rm-risk[data-sev="block"] { border-left-color: var(--block); }
+  .rm-risk[data-sev="high"] { border-left-color: var(--watch); }
+  .rm-chip {
+    font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 3px 8px; border-radius: 6px; vertical-align: middle;
+  }
+  .rm-chip[data-sev="block"] { color: var(--block); background: rgba(192,57,43,0.10); }
+  .rm-chip[data-sev="high"] { color: var(--watch); background: rgba(183,121,31,0.12); }
+  .rm-risk h4 { display: inline; font-size: 0.98rem; font-weight: 680; margin-left: 8px; }
+  .rm-risk p { font-size: 0.9rem; color: var(--slate); margin-top: 8px; }
+
+  /* Optimism check */
+  .rm-check { display: grid; gap: 14px; }
+  .rm-check-item { border: 1px dashed var(--line); border-radius: 12px; padding: 16px 18px; }
+  .rm-check-item h4 { font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; }
+  .rm-check-item .rm-was { font-size: 0.85rem; color: var(--faint); margin: 4px 0 8px; }
+  .rm-check-item .rm-fix { font-size: 0.92rem; color: var(--slate); }
+  .rm-check-item .rm-fix b { color: var(--ink); font-weight: 650; }
+
+  /* App status */
+  .rm-app { background: var(--ink); color: #e9ecea; border-radius: 16px; padding: 26px; margin-top: 12px; }
+  .rm-app .rm-kicker { color: #7fd3ad; }
+  .rm-app-cols { display: grid; gap: 22px; margin-top: 6px; }
+  @media (min-width: 640px) { .rm-app-cols { grid-template-columns: 1fr 1fr; } }
+  .rm-app h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 10px; color: #fff; }
+  .rm-app ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .rm-app li { font-size: 0.9rem; color: #b9c0bd; padding-left: 22px; position: relative; line-height: 1.45; }
+  .rm-app li::before { position: absolute; left: 0; top: 0; font-family: var(--mono); font-size: 0.85rem; }
+  .rm-app .rm-done li::before { content: "✓"; color: #7fd3ad; }
+  .rm-app .rm-next li::before { content: "→"; color: #e9b949; }
+
+  .rm-foot { margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 0.82rem; color: var(--faint); }
+  .rm-foot b { color: var(--slate); font-weight: 600; }
+</style>
+
+<div class="rm">
+  <div class="rm-wrap">
+    <header class="rm-masthead">
+      <span class="rm-wordmark">Hamba</span>
+      <span class="rm-eyebrow">Build &amp; Launch Roadmap</span>
+    </header>
+
+    <p class="rm-eyebrow">Uber for moving &amp; hauling · South Africa</p>
+    <h1 class="rm-title">The hard part isn't the app. It's supply and trust.</h1>
+    <p class="rm-lede">Your strategy is sound. This turns it into something executable for one Joburg corridor — and, just as importantly, into the order you should do it in. Built from a five-lens analysis plus an adversarial reality-check.</p>
+
+    <div class="rm-northstar">
+      <span class="rm-kicker">North star</span>
+      <p>Own ONE 15&nbsp;km Joburg corridor end-to-end — 25–40 vetted bakkie owners, every paid booking contactable and fulfillable, dispatched by a human over WhatsApp — before building any algorithm, driver app, or live GPS.</p>
+    </div>
+
+    <section class="rm-sec">
+      <span class="rm-kicker">Do this first</span>
+      <div class="rm-verdict">
+        <h3>Prove demand before you build anything.</h3>
+        <p>The single most important call in this whole document: <strong>do not build a backend or fund a standby driver fleet yet.</strong> Your own logic — "automate only what manual ops proves" — applies one level higher than the plan realises. Prove that paid demand exists before spending a rand on tech.</p>
+        <p>Run a <strong>4-week, zero-code concierge test</strong>:</p>
+        <ul class="rm-steps">
+          <li><span class="rm-n">1</span><span>One WhatsApp number. You answer it.</span></li>
+          <li><span class="rm-n">2</span><span>Quote each job by hand; send a Yoco payment link manually.</span></li>
+          <li><span class="rm-n">3</span><span>5 drivers paid <strong>per completed job only</strong> — no standby retainer.</span></li>
+          <li><span class="rm-n">4</span><span>A Google Sheet is your entire "system".</span></li>
+        </ul>
+        <p style="margin-top:16px"><strong>The kill-number:</strong> if you can't organically generate <strong>15–20 paid, fulfilled moves a week</strong> in your corridor at a survivable cost by week 8 — stop. You'll have learned it for ≈R0 instead of R700k+. Everything below is downstream of this one test passing.</p>
+      </div>
+    </section>
+
+    <section class="rm-sec">
+      <h2 class="rm-h2">The three phases</h2>
+      <p class="rm-sub">Lean by design. Each phase is earned by the previous one working — not scheduled in advance.</p>
+      <div class="rm-timeline">
+        <div class="rm-phase" data-now>
+          <div class="rm-phase-head">
+            <h3>Phase 0 — Make one real booking possible</h3>
+            <span class="rm-when">Weeks 1–4</span>
+          </div>
+          <p class="rm-goal">Turn the demo into something that can capture, confirm and fulfil a single real, contactable, paid booking — with honest pricing and zero false claims. (Most of this is the concierge test; the app build waits until demand is proven.)</p>
+          <ul class="rm-deliv">
+            <li>Capture customer <b>name + WhatsApp number</b> before payment — today the app stores no customer identity at all, so a "booking" can't be contacted or fulfilled.</li>
+            <li>Pick ONE ~15&nbsp;km corridor (lead bet: Sandton / Bryanston / Fourways / Midrand) and vet every driver in person.</li>
+            <li>Replace free-text addresses with a corridor <b>suburb picker</b>; quote a <b>price range</b>, not a fake-precise total.</li>
+            <li>Add T&amp;Cs + a POPIA privacy notice + consent before payment; register an Information Officer (free, online).</li>
+            <li>Get a broker quote for goods-in-transit cover <b>in writing</b> — this is a go/no-go gate, not a later step.</li>
+          </ul>
+        </div>
+        <div class="rm-phase">
+          <div class="rm-phase-head">
+            <h3>Phase 1 — Real money, real fulfilment, real trust</h3>
+            <span class="rm-when">Weeks 4–10</span>
+          </div>
+          <p class="rm-goal">Take money safely, fulfil jobs via manual WhatsApp dispatch with engineered no-show resistance, and stand up the legal + insurance floor before the first paid house move.</p>
+          <ul class="rm-deliv">
+            <li>Stand up a lean backend (<b>Supabase</b>: Postgres + phone-OTP + Realtime) and move pricing server-side. Never trust a browser-computed total.</li>
+            <li>Wire real <b>Yoco</b> via a server-created checkout + webhook. Use deposit-now / balance-on-completion, not full prepayment.</li>
+            <li>A <b>/driver route in the same PWA</b> (not a second app): see job, accept, press status buttons → drives an honest live status timeline.</li>
+            <li>Manual weekly EFT payouts with a transparent commission ledger. Yoco collects into your account; it does not pay drivers out.</li>
+            <li>Bind goods-in-transit + public-liability cover and attorney-reviewed T&amp;Cs + contractor agreements <b>before</b> the first paid move.</li>
+          </ul>
+        </div>
+        <div class="rm-phase">
+          <div class="rm-phase-head">
+            <h3>Phase 2 — Automate only what manual ops proves</h3>
+            <span class="rm-when">Month 3+ · earned</span>
+          </div>
+          <p class="rm-goal">Once one corridor has steady liquidity and the human dispatcher is provably the bottleneck, automate the painful parts and clone the corridor.</p>
+          <ul class="rm-deliv">
+            <li>Rules-based auto-dispatch; automated payouts via a licensed rail (Stitch / Ozow / Paystack).</li>
+            <li>Coarse live GPS pin while the driver app is open (background GPS is impossible in a PWA — don't promise it).</li>
+            <li>Ratings &amp; driver scorecard; secondary revenue (insurance add-on, packing materials, storage referrals).</li>
+            <li>Clone the corridor playbook to a second belt — expansion is a data exercise, not a rebuild.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="rm-sec">
+      <h2 class="rm-h2">First 90 days</h2>
+      <p class="rm-sub">Build, corridor selection, and supply recruiting run in parallel — but demand marketing turns on last, only once you can actually fulfil.</p>
+      <div class="rm-windows">
+        <div class="rm-win">
+          <span class="rm-day">DAYS 1–30</span>
+          <h4>Validate &amp; prep</h4>
+          <ul>
+            <li>Run the concierge demand test</li>
+            <li>Lock ONE corridor</li>
+            <li>DM every bakkie-for-hire lister in zone (Gumtree / OLX / Marketplace)</li>
+            <li>Get the GIT broker quote in writing</li>
+          </ul>
+        </div>
+        <div class="rm-win">
+          <span class="rm-day">DAYS 30–60</span>
+          <h4>Money &amp; ops, no marketing yet</h4>
+          <ul>
+            <li>Wire real Yoco + payout ledger</li>
+            <li>Vet &amp; sign 25–30 drivers</li>
+            <li>WhatsApp + Sheet dispatch live</li>
+            <li>10–20 soft test moves to debug the SOP</li>
+          </ul>
+        </div>
+        <div class="rm-win">
+          <span class="rm-day">DAYS 60–90</span>
+          <h4>Open &amp; prove reliability</h4>
+          <ul>
+            <li>Open bookings in-corridor only</li>
+            <li>Close 2–3 B2B partnerships</li>
+            <li>Staff month-end heavily (the SA rush)</li>
+            <li>Ramp commission 0%→10% once volume holds</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="rm-sec">
+      <h2 class="rm-h2">Unit economics — one worked job</h2>
+      <p class="rm-sub">A 25&nbsp;km local move, half-truck load, 1 helper, using the app's own rates. VAT removed (you're not VAT-registered yet).</p>
+      <div class="rm-econ">
+        <div class="rm-econ-row"><span class="rm-lbl">Call-out base</span><span class="rm-amt">R650</span></div>
+        <div class="rm-econ-row"><span class="rm-lbl">Distance · 25&nbsp;km × R22</span><span class="rm-amt">R550</span></div>
+        <div class="rm-econ-row"><span class="rm-lbl">Half-truck load · ×1.6</span><span class="rm-amt">+R720</span></div>
+        <div class="rm-econ-row"><span class="rm-lbl">1 helper</span><span class="rm-amt">+R280</span></div>
+        <div class="rm-econ-row rm-emph"><span class="rm-lbl">Customer pays (quoted as a range)</span><span class="rm-amt">≈R2,200</span></div>
+        <div class="rm-econ-row"><span class="rm-lbl">Hamba commission @ 15%</span><span class="rm-amt">R330</span></div>
+        <div class="rm-econ-row"><span class="rm-lbl">– Yoco fee · GIT premium · comms</span><span class="rm-amt">−R110–150</span></div>
+        <div class="rm-econ-row rm-emph"><span class="rm-lbl">Net contribution per job</span><span class="rm-amt">≈R180–220</span></div>
+      </div>
+      <div class="rm-econ-foot">Thin per job, so <b>volume per driver-shift is everything</b>. The real cost isn't per-job — it's the standby guarantee. Model it honestly (next section).</div>
+    </section>
+
+    <section class="rm-sec">
+      <h2 class="rm-h2">Where the plan was too optimistic</h2>
+      <p class="rm-sub">The adversarial pass flagged four assumptions that quietly decide whether this lives or dies. Corrected here so you don't learn them the expensive way.</p>
+      <div class="rm-check">
+        <div class="rm-check-item">
+          <h4>The real cold-start burn is 2–4× bigger</h4>
+          <p class="rm-was">Plan assumed: ≈R300k standby.</p>
+          <p class="rm-fix"><b>Closer to R700k–R1.2m</b> once you add a dispatcher salary (~R15–25k/mo for 9 months), attorney work (R25–60k), vetting, the GIT premium, and a realistic CAC. A bakkie owner who can clear R1,500–2,500 on a freelance move won't sit on standby for R750. Set the hard kill-number and don't fund standby until demand is proven.</p>
+        </div>
+        <div class="rm-check-item">
+          <h4>Moving is a near-zero-frequency purchase</h4>
+          <p class="rm-was">Plan assumed: 20% repeat rate, &lt;R150 organic CAC.</p>
+          <p class="rm-fix">Households move every 3–7 years; rubble is one-off. There's no retention flywheel, so you pay near-full CAC forever (realistically <b>R300–800</b>, not R150). Fix: make <b>B2B the primary channel</b> — builders' merchants, estate/rental agents, self-storage, landscapers give schedulable, repeatable volume. Consumer house-moves are the topping, not the base.</p>
+        </div>
+        <div class="rm-check-item">
+          <h4>Goods-in-transit insurance is a go/no-go gate</h4>
+          <p class="rm-was">Plan assumed: "get a quote", ~R40–80/job.</p>
+          <p class="rm-fix">SA underwriters often <b>decline a rotating pool of casual owner-drivers with no telematics</b>, or load it heavily. If blanket cover is unobtainable or uneconomic, your "Insured load" badge is undeliverable and the thin margin evaporates. Get it in writing before building — and if it fails, change the claim to "vetted &amp; accountable," not "insured."</p>
+        </div>
+        <div class="rm-check-item">
+          <h4>Disintermediation is structural, not a bug</h4>
+          <p class="rm-was">Plan assumed: a no-circumvention clause protects you.</p>
+          <p class="rm-fix">The job forces driver and customer to meet at a house and swap numbers. A good R2,200 move and they'll call the driver direct next time — a clause won't stop it. Design value around what they <b>lose</b> by going direct (insurance, guaranteed backup, dispute recourse) and lean on B2B accounts where the relationship is the contract, not the individual move.</p>
+        </div>
+        <div class="rm-check-item">
+          <h4>You already have competition</h4>
+          <p class="rm-was">Plan assumed: a clear field.</p>
+          <p class="rm-fix"><b>Wise Move</b> already runs an SA moving-quote marketplace; <b>Picup / Droppa</b> do same-day delivery; thousands of <b>Gumtree/OLX bakkies</b> are cheaper and commission-free; established movers (Biddulphs, Stuttaford) own the high end. Your wedge is verified trust + reliability in one dense corridor — name it sharply against these, don't pretend they're absent.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="rm-sec">
+      <h2 class="rm-h2">Revenue, sequenced</h2>
+      <p class="rm-sub">Order matters — adding the wrong stream early kills the supply you're fighting to recruit.</p>
+      <div class="rm-rev">
+        <div class="rm-rev-item"><h4>Booking commission</h4><span class="rm-when2">RAMP 0→10→15→20%</span><p>Core revenue. Start at 0% to recruit; raise only once drivers visibly net more via Hamba than freelancing. Raising too early triggers defection back to cash WhatsApp jobs.</p></div>
+        <div class="rm-rev-item"><h4>Insurance / GIT add-on</h4><span class="rm-when2">PHASE 1</span><p>Raises basket size and de-risks high-value moves — once the blanket policy is actually in force.</p></div>
+        <div class="rm-rev-item"><h4>Packing materials</h4><span class="rm-when2">PHASE 2</span><p>Boxes, blankets, tape. Margin-positive, sourced via the same drivers/partners.</p></div>
+        <div class="rm-rev-item"><h4>Storage referrals</h4><span class="rm-when2">PHASE 2</span><p>Referral cut off the self-storage partnership; near-zero cost to deliver.</p></div>
+        <div class="rm-rev-item"><h4>Driver subscriptions &amp; featured listings</h4><span class="rm-when2">HOLD</span><p>Only once drivers compete for jobs. Charging scarce early drivers to be on the platform will kill recruitment.</p></div>
+      </div>
+    </section>
+
+    <section class="rm-sec">
+      <h2 class="rm-h2">KPI dashboard</h2>
+      <p class="rm-sub">Year-1 targets, corrected to be honest about a manual, casual-driver operation. Don't publish any public SLA you can't already hit.</p>
+      <div class="rm-tablewrap">
+        <table class="rm-kpi">
+          <thead><tr><th>Metric</th><th>Year-1 target</th></tr></thead>
+          <tbody>
+            <tr><td>Paid, fulfilled jobs in-corridor</td><td class="rm-target">15→30 / week</td></tr>
+            <tr><td>Active vetted drivers (on standby)</td><td class="rm-target">25–40 (8–12)</td></tr>
+            <tr><td>On-time vs quoted window</td><td class="rm-target">80–85%</td></tr>
+            <tr><td>No-show rate (track backup save-rate)</td><td class="rm-target">5–10%</td></tr>
+            <tr><td>Standby coverage ratio</td><td class="rm-target">≥ 1.5</td></tr>
+            <tr><td>Driver payout speed</td><td class="rm-target">24–48 h</td></tr>
+            <tr><td>Driver 30-day retention</td><td class="rm-target">≥ 70%</td></tr>
+            <tr><td>Customer rating (CSAT)</td><td class="rm-target">≥ 4.5 / 5</td></tr>
+            <tr><td>B2B booking share <span style="color:var(--faint)">(replaces repeat-rate)</span></td><td class="rm-target">40–60%</td></tr>
+            <tr><td>Customer acquisition cost</td><td class="rm-target">R300–800</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rm-sec">
+      <h2 class="rm-h2">Top risks</h2>
+      <div class="rm-risks">
+        <div class="rm-risk" data-sev="block">
+          <span class="rm-chip" data-sev="block">Launch blocker</span><h4>False trust &amp; insurance claims</h4>
+          <p>The UI shows "ID verified", "Insured load", "Vetted drivers" with no backend and no real vetting. Under the Consumer Protection Act these are enforceable representations — going live like this is a live misrepresentation and direct liability the moment goods are damaged. Gate every badge behind a real per-driver flag.</p>
+        </div>
+        <div class="rm-risk" data-sev="block">
+          <span class="rm-chip" data-sev="block">Launch blocker</span><h4>The Yoco payout gap</h4>
+          <p>Yoco collects the full fare into <em>your</em> account — it has no native split/escrow/payout to independent drivers in SA. Paying drivers is a separate, initially manual process; spending money you owe them is a trust-killer and a possible unlicensed-payment issue. Run an honest manual EFT ledger first.</p>
+        </div>
+        <div class="rm-risk" data-sev="high">
+          <span class="rm-chip" data-sev="high">High</span><h4>Two-sided cold-start sequencing</h4>
+          <p>Tech can be ready in weeks, but with no verified drivers there are no jobs to dispatch. Vetting + insurance + manual ops must be live <em>before</em> demand marketing — or paid bookings get refunded with no driver, damaging the exact reliability you're selling.</p>
+        </div>
+        <div class="rm-risk" data-sev="high">
+          <span class="rm-chip" data-sev="high">High</span><h4>Driver misclassification (LRA s200A)</h4>
+          <p>Branding "your driver", assigning jobs and fixing prices pushes toward deemed employment — retroactive PAYE / UIF / leave exposure across the whole base. Keep drivers free to accept/decline and work elsewhere; get the contractor agreement attorney-reviewed.</p>
+        </div>
+        <div class="rm-risk" data-sev="high">
+          <span class="rm-chip" data-sev="high">High</span><h4>POPIA &amp; customer safety</h4>
+          <p>You collect addresses, empty-home dates and (literally) "gate codes" with no consent notice. A moving app uniquely tells a bad actor when a home is empty. Capture consent now, minimise data, mask drop-off until acceptance, and proxy phone numbers later.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="rm-sec">
+      <h2 class="rm-h2">The app, right now</h2>
+      <div class="rm-app">
+        <span class="rm-kicker">Where the live build stands</span>
+        <div class="rm-app-cols">
+          <div>
+            <h4>Fixed today (legal honesty)</h4>
+            <ul class="rm-done">
+              <li>Removed the hardcoded 15% VAT line — you're not VAT-registered, so it was a SARS/customer misrepresentation.</li>
+              <li>Reframed the price as an <b>estimate, confirmed by your driver before the move</b> — no more fake-precise totals.</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Build next (in order)</h4>
+            <ul class="rm-next">
+              <li>Capture customer name + WhatsApp before payment.</li>
+              <li>Gate "verified / insured" badges behind real per-driver checks.</li>
+              <li>Supabase backend + real Yoco checkout + a /driver route.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <p class="rm-foot"><b>How this was made:</b> a five-lens analysis (product, architecture, supply &amp; ops, SA legal/insurance, go-to-market) synthesised into one plan, then put through an adversarial reality-check. The figures are working assumptions to pressure-test with a broker, an attorney and your own corridor data — not guarantees.</p>
+  </div>
+</div>

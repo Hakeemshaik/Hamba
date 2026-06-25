@@ -55,12 +55,12 @@ export default function Payment({ booking, onBack, onPaid, setProcessing }: Prop
           <Line k="Distance" v={formatZar(quote.distance)} />
           {quote.loadAdjustment > 0 && <Line k="Load size" v={formatZar(quote.loadAdjustment)} />}
           {quote.helpers > 0 && <Line k={`Helpers (${booking.helpers})`} v={formatZar(quote.helpers)} />}
-          <Line k="VAT (15%)" v={formatZar(quote.vat)} />
         </div>
         <div className="receipt-total">
-          <span>Total due</span>
+          <span>Estimated total</span>
           <strong>{formatZar(quote.total)}</strong>
         </div>
+        <p className="estimate-note">Estimate — your driver confirms the final price before the move begins.</p>
       </div>
 
       <p className="group-label">Pay with</p>

@@ -1,8 +1,6 @@
 import type { Booking, Quote } from './types'
 import { serviceById, loadById, HELPER_RATE } from './data'
 
-export const VAT_RATE = 0.15
-
 export function formatZar(amount: number): string {
   return 'R' + Math.round(amount).toLocaleString('en-ZA')
 }
@@ -37,9 +35,11 @@ export function calculateQuote(booking: Booking): Quote {
   const loadAdjustment = subtotalBeforeLoad * (load.multiplier - 1)
   const helpers = booking.helpers * HELPER_RATE
 
-  const subtotal = base + distance + loadAdjustment + helpers
-  const vat = subtotal * VAT_RATE
-  const total = subtotal + vat
+  // VAT is intentionally not added: a pre-revenue startup under the SARS R1m
+  // threshold is not VAT-registered, so charging/showing VAT would be a
+  // misrepresentation. Prices are quoted inclusive. Re-introduce a VAT line
+  // only once Hamba is actually registered.
+  const total = base + distance + loadAdjustment + helpers
 
-  return { base, distance, loadAdjustment, helpers, vat, total }
+  return { base, distance, loadAdjustment, helpers, vat: 0, total }
 }
