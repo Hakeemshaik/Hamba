@@ -67,6 +67,55 @@ const ART: Record<string, JSX.Element> = {
       <rect x="33" y="37" width="13" height="3" rx="1.5" fill="#94a3b8" />
     </g>
   ),
+  // Furniture
+  sofa: (
+    <g>
+      <ellipse cx="32" cy="50" rx="24" ry="3" fill="#000" opacity="0.06" />
+      <rect x="14" y="22" width="36" height="16" rx="7" fill="#9b82ff" />
+      <rect x="10" y="30" width="44" height="14" rx="6" fill="#7c5cff" />
+      <rect x="8" y="32" width="9" height="15" rx="4.5" fill="#6b4ce0" />
+      <rect x="47" y="32" width="9" height="15" rx="4.5" fill="#6b4ce0" />
+      <rect x="16" y="44" width="5" height="6" rx="1.5" fill="#3a2a8a" />
+      <rect x="43" y="44" width="5" height="6" rx="1.5" fill="#3a2a8a" />
+    </g>
+  ),
+  // Appliances (fridge)
+  appliance: (
+    <g>
+      <ellipse cx="32" cy="52" rx="18" ry="2.6" fill="#000" opacity="0.06" />
+      <rect x="20" y="12" width="24" height="40" rx="5" fill="#e2e8f0" stroke="#cbd5e1" strokeWidth="1.2" />
+      <path d="M20 28h24" stroke="#cbd5e1" strokeWidth="1.5" />
+      <rect x="38" y="16" width="2.6" height="9" rx="1.3" fill="#94a3b8" />
+      <rect x="38" y="32" width="2.6" height="10" rx="1.3" fill="#94a3b8" />
+      <rect x="24" y="17" width="6" height="3" rx="1.5" fill="#38bdf8" />
+    </g>
+  ),
+  // Office move (building)
+  office: (
+    <g>
+      <ellipse cx="32" cy="52" rx="22" ry="2.8" fill="#000" opacity="0.06" />
+      <rect x="16" y="14" width="32" height="38" rx="4" fill="#2dd4bf" />
+      <rect x="16" y="14" width="32" height="7" rx="4" fill="#14b8a6" />
+      <g fill="#eafaf4">
+        <rect x="21" y="25" width="6" height="6" rx="1.2" />
+        <rect x="31" y="25" width="6" height="6" rx="1.2" />
+        <rect x="41" y="25" width="3" height="6" rx="1.2" />
+        <rect x="21" y="34" width="6" height="6" rx="1.2" />
+        <rect x="31" y="34" width="6" height="6" rx="1.2" />
+        <rect x="41" y="34" width="3" height="6" rx="1.2" />
+      </g>
+      <rect x="28" y="43" width="8" height="9" rx="1.5" fill="#0f9488" />
+    </g>
+  ),
+  // Customer avatar (neutral)
+  avatar: (
+    <g>
+      <rect width="64" height="64" rx="32" fill="#ffe7d6" />
+      <path d="M12 58c0-11 9-17 20-17s20 6 20 17Z" fill="#ff8a4c" />
+      <circle cx="32" cy="27" r="12" fill="#f6c9a8" />
+      <path d="M20 25c0-7 6-11 12-11s12 4 12 11c-2-3-5-4-12-4s-10 1-12 4Z" fill="#5b3b2e" />
+    </g>
+  ),
   // Friendly driver avatar
   driver: (
     <g>

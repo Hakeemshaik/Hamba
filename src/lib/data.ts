@@ -2,32 +2,72 @@ import type { Service, LoadOption } from './types'
 
 export const SERVICES: Service[] = [
   {
-    id: 'long-distance',
-    name: 'Long Distance Move',
-    tagline: 'City to city, door to door',
-    icon: 'truck',
-    base: 1200,
-    perKm: 14,
-    accent: '#e8f0ff',
-  },
-  {
     id: 'local-move',
     name: 'Local Removal',
     tagline: 'Moving across town',
     icon: 'boxes',
+    category: 'moves',
     base: 650,
     perKm: 22,
     accent: '#eafaf1',
   },
   {
+    id: 'long-distance',
+    name: 'Long Distance',
+    tagline: 'City to city',
+    icon: 'truck',
+    category: 'moves',
+    base: 1200,
+    perKm: 14,
+    accent: '#e8f0ff',
+  },
+  {
+    id: 'furniture',
+    name: 'Furniture',
+    tagline: 'Single items & sets',
+    icon: 'sofa',
+    category: 'delivery',
+    base: 480,
+    perKm: 20,
+    accent: '#f1ecff',
+  },
+  {
+    id: 'appliance',
+    name: 'Appliances',
+    tagline: 'Fridges, washers, TVs',
+    icon: 'appliance',
+    category: 'delivery',
+    base: 520,
+    perKm: 20,
+    accent: '#eaf6fb',
+  },
+  {
     id: 'rubble',
     name: 'Rubble Removal',
-    tagline: 'Site clearing & dumping',
+    tagline: 'Site & garden clearing',
     icon: 'rubble',
+    category: 'clearing',
     base: 850,
     perKm: 18,
     accent: '#fff4e0',
   },
+  {
+    id: 'office',
+    name: 'Office Move',
+    tagline: 'Desks, IT & filing',
+    icon: 'office',
+    category: 'moves',
+    base: 1400,
+    perKm: 16,
+    accent: '#eafaf4',
+  },
+]
+
+export const CATEGORIES = [
+  { id: 'all', label: 'All' },
+  { id: 'moves', label: 'Moves' },
+  { id: 'delivery', label: 'Delivery' },
+  { id: 'clearing', label: 'Clearing' },
 ]
 
 export const LOAD_OPTIONS: LoadOption[] = [

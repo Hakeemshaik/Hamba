@@ -79,6 +79,68 @@ const PATHS: Record<string, JSX.Element> = {
     </>
   ),
   bolt: <path d="M13 3 5 13h5.5L9 21l9-11h-5.5L13 3Z" />,
+  home: (
+    <>
+      <path d="M4 11 12 4l8 7" />
+      <path d="M6 10v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-9" />
+    </>
+  ),
+  user: (
+    <>
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4.5 20a7.5 7.5 0 0 1 15 0" />
+    </>
+  ),
+  plus: <path d="M12 5v14M5 12h14" />,
+  bell: (
+    <>
+      <path d="M6 10a6 6 0 0 1 12 0c0 4 1.5 5 2 5.5H4c.5-.5 2-1.5 2-5.5Z" />
+      <path d="M10 19a2 2 0 0 0 4 0" />
+    </>
+  ),
+  help: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M9.5 9.2a2.6 2.6 0 0 1 4.2 2c0 1.6-2.2 2-2.2 3.6" />
+      <path d="M12 17.6h.01" />
+    </>
+  ),
+  logout: (
+    <>
+      <path d="M14 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3" />
+      <path d="M9 16l-4-4 4-4" />
+      <path d="M5 12h11" />
+    </>
+  ),
+  camera: (
+    <>
+      <path d="M4 8h3.5L9 6h6l1.5 2H20a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z" />
+      <circle cx="12" cy="13" r="3.2" />
+    </>
+  ),
+  search: (
+    <>
+      <circle cx="11" cy="11" r="6" />
+      <path d="m20 20-3.6-3.6" />
+    </>
+  ),
+  grid: (
+    <>
+      <rect x="4" y="4" width="7" height="7" rx="1.6" />
+      <rect x="13" y="4" width="7" height="7" rx="1.6" />
+      <rect x="4" y="13" width="7" height="7" rx="1.6" />
+      <rect x="13" y="13" width="7" height="7" rx="1.6" />
+    </>
+  ),
+  list: (
+    <>
+      <path d="M9 6h11M9 12h11M9 18h11" />
+      <circle cx="4.5" cy="6" r="1.1" />
+      <circle cx="4.5" cy="12" r="1.1" />
+      <circle cx="4.5" cy="18" r="1.1" />
+    </>
+  ),
+  arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
   calendar: (
     <>
       <rect x="4" y="5" width="16" height="16" rx="2.5" />
