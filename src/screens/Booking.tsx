@@ -3,15 +3,17 @@ import { formatZar, calculateQuote } from '../lib/quote'
 import type { Booking as BookingT, LoadSize } from '../lib/types'
 import Icon from '../components/Icon'
 import StepHeader from '../components/StepHeader'
+import AddressInput from '../components/AddressInput'
 
 interface Props {
   booking: BookingT
   update: (patch: Partial<BookingT>) => void
+  recents: string[]
   onBack: () => void
   onContinue: () => void
 }
 
-export default function Booking({ booking, update, onBack, onContinue }: Props) {
+export default function Booking({ booking, update, recents, onBack, onContinue }: Props) {
   const service = serviceById(booking.service)
   const quote = calculateQuote(booking)
   const today = new Date().toISOString().split('T')[0]
@@ -34,39 +36,22 @@ export default function Booking({ booking, update, onBack, onContinue }: Props) 
 
       <div className="form-stack">
         <p className="group-label">Route</p>
-        <div className="glass field-group">
-          <label className="field field--icon">
-            <span className="field-marker field-marker--a" aria-hidden>
-              <Icon name="pin" />
-            </span>
-            <span className="field-body">
-              <span className="field-label">Pickup address</span>
-              <input
-                className="field-input"
-                placeholder="From — street, suburb, city"
-                autoComplete="off"
-                value={booking.pickup}
-                onChange={(e) => update({ pickup: e.target.value })}
-              />
-            </span>
-          </label>
-          <div className="field-divider" />
-          <label className="field field--icon">
-            <span className="field-marker field-marker--b" aria-hidden>
-              <Icon name="pin" />
-            </span>
-            <span className="field-body">
-              <span className="field-label">Drop-off address</span>
-              <input
-                className="field-input"
-                placeholder="To — street, suburb, city"
-                autoComplete="off"
-                value={booking.dropoff}
-                onChange={(e) => update({ dropoff: e.target.value })}
-              />
-            </span>
-          </label>
-        </div>
+        <AddressInput
+          label="Pickup address"
+          marker="a"
+          placeholder="From — suburb or area"
+          value={booking.pickup}
+          recents={recents}
+          onChange={(v) => update({ pickup: v })}
+        />
+        <AddressInput
+          label="Drop-off address"
+          marker="b"
+          placeholder="To — suburb or area"
+          value={booking.dropoff}
+          recents={recents}
+          onChange={(v) => update({ dropoff: v })}
+        />
 
         <p className="group-label">When</p>
         <div className="glass field-group row2">

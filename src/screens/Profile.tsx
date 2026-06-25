@@ -7,9 +7,10 @@ interface Props {
   onEdit: () => void
   onActivity: () => void
   onHelp: () => void
+  onLogout: () => void
 }
 
-export default function Profile({ profile, onEdit, onActivity, onHelp }: Props) {
+export default function Profile({ profile, onEdit, onActivity, onHelp, onLogout }: Props) {
   const rows = [
     { icon: 'user', label: 'Personal information', go: onEdit },
     { icon: 'list', label: 'My bookings', go: onActivity },
@@ -47,7 +48,7 @@ export default function Profile({ profile, onEdit, onActivity, onHelp }: Props) 
         ))}
       </div>
 
-      <button className="glass menu-row menu-row--danger">
+      <button className="glass menu-row menu-row--danger" onClick={onLogout}>
         <span className="menu-ico"><Icon name="logout" /></span>
         <span className="menu-label">Log out</span>
       </button>

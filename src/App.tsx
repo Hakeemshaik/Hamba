@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import ProcessingOverlay from './components/ProcessingOverlay'
 import TabBar, { type Tab } from './components/TabBar'
+import SignIn from './screens/SignIn'
 import Home from './screens/Home'
 import Booking from './screens/Booking'
 import Payment from './screens/Payment'
@@ -11,9 +12,10 @@ import Activity from './screens/Activity'
 import Help from './screens/Help'
 import { estimateDistance } from './lib/quote'
 import { SERVICES } from './lib/data'
+import { loadProfile, saveProfile, clearAccount, topAddresses, recordAddress } from './lib/storage'
 import type { Booking as BookingT, Customer, PaymentMethod, ServiceId } from './lib/types'
 
-type Screen = Tab | 'editProfile' | 'booking' | 'payment' | 'tracking'
+type Screen = Tab | 'signin' | 'editProfile' | 'booking' | 'payment' | 'tracking'
 
 const EMPTY: BookingT = {
   service: null,
@@ -27,21 +29,15 @@ const EMPTY: BookingT = {
   helpers: 0,
 }
 
-const DEFAULT_PROFILE: Customer = {
-  name: 'Lerato Khumalo',
-  phone: '+27 82 145 9930',
-  email: 'lerato@email.co.za',
-  address: 'Bryanston, Johannesburg',
-}
-
 const TAB_SCREENS: Screen[] = ['home', 'activity', 'help', 'profile']
 
 export default function App() {
-  const [screen, setScreen] = useState<Screen>('home')
+  const [profile, setProfile] = useState<Customer | null>(() => loadProfile())
+  const [screen, setScreen] = useState<Screen>(() => (loadProfile() ? 'home' : 'signin'))
   const [booking, setBooking] = useState<BookingT>(EMPTY)
   const [processing, setProcessing] = useState<string | null>(null)
   const [paidWith, setPaidWith] = useState<PaymentMethod | null>(null)
-  const [profile, setProfile] = useState<Customer>(DEFAULT_PROFILE)
+  const [recents, setRecents] = useState<string[]>(() => topAddresses())
 
   const update = (patch: Partial<BookingT>) => {
     setBooking((prev) => {
@@ -58,7 +54,35 @@ export default function App() {
     setScreen('booking')
   }
 
+  const signIn = (c: Customer) => {
+    saveProfile(c)
+    setProfile(c)
+    setScreen('home')
+  }
+
+  const logout = () => {
+    clearAccount()
+    setProfile(null)
+    setScreen('signin')
+  }
+
+  const goToPayment = () => {
+    recordAddress(booking.pickup)
+    setRecents(recordAddress(booking.dropoff).map((a) => a.value))
+    setScreen('payment')
+  }
+
   const showTabs = TAB_SCREENS.includes(screen)
+
+  if (screen === 'signin' || !profile) {
+    return (
+      <div className="app">
+        <main className="app-main">
+          <SignIn onSignIn={signIn} />
+        </main>
+      </div>
+    )
+  }
 
   return (
     <div className="app">
@@ -79,6 +103,7 @@ export default function App() {
             onEdit={() => setScreen('editProfile')}
             onActivity={() => setScreen('activity')}
             onHelp={() => setScreen('help')}
+            onLogout={logout}
           />
         )}
 
@@ -87,6 +112,7 @@ export default function App() {
             profile={profile}
             onBack={() => setScreen('profile')}
             onSave={(c) => {
+              saveProfile(c)
               setProfile(c)
               setScreen('profile')
             }}
@@ -97,8 +123,9 @@ export default function App() {
           <Booking
             booking={booking}
             update={update}
+            recents={recents}
             onBack={() => setScreen('home')}
-            onContinue={() => setScreen('payment')}
+            onContinue={goToPayment}
           />
         )}
 
