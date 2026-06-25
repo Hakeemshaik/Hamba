@@ -5,7 +5,7 @@ import SignIn from './screens/SignIn'
 import Home from './screens/Home'
 import Booking from './screens/Booking'
 import Payment from './screens/Payment'
-import Tracking from './screens/Tracking'
+import Track from './screens/Track'
 import Profile from './screens/Profile'
 import EditProfile from './screens/EditProfile'
 import Activity from './screens/Activity'
@@ -14,9 +14,9 @@ import { estimateDistance, calculateQuote } from './lib/quote'
 import { SERVICES, serviceById } from './lib/data'
 import { persistBooking, persistCustomer } from './lib/db'
 import { loadProfile, saveProfile, clearAccount, topAddresses, recordAddress } from './lib/storage'
-import type { Booking as BookingT, Customer, PaymentMethod, ServiceId } from './lib/types'
+import type { Booking as BookingT, Customer, ServiceId } from './lib/types'
 
-type Screen = Tab | 'signin' | 'editProfile' | 'booking' | 'payment' | 'tracking'
+type Screen = Tab | 'signin' | 'editProfile' | 'help' | 'booking' | 'payment'
 
 const EMPTY: BookingT = {
   service: null,
@@ -30,14 +30,14 @@ const EMPTY: BookingT = {
   helpers: 0,
 }
 
-const TAB_SCREENS: Screen[] = ['home', 'activity', 'help', 'profile']
+const TAB_SCREENS: Screen[] = ['home', 'track', 'activity', 'profile']
 
 export default function App() {
   const [profile, setProfile] = useState<Customer | null>(() => loadProfile())
   const [screen, setScreen] = useState<Screen>(() => (loadProfile() ? 'home' : 'signin'))
   const [booking, setBooking] = useState<BookingT>(EMPTY)
   const [processing, setProcessing] = useState<string | null>(null)
-  const [paidWith, setPaidWith] = useState<PaymentMethod | null>(null)
+  const [justBooked, setJustBooked] = useState(false)
   const [recents, setRecents] = useState<string[]>(() => topAddresses())
 
   const update = (patch: Partial<BookingT>) => {
@@ -51,6 +51,7 @@ export default function App() {
   }
 
   const startBooking = (id: ServiceId) => {
+    setJustBooked(false)
     setBooking({ ...EMPTY, service: id })
     setScreen('booking')
   }
@@ -95,9 +96,17 @@ export default function App() {
           <Home name={profile.name} onSelect={startBooking} onProfile={() => setScreen('profile')} />
         )}
 
+        {screen === 'track' && (
+          <Track
+            justBooked={justBooked}
+            onBook={() => setScreen('home')}
+            onHelp={() => setScreen('help')}
+          />
+        )}
+
         {screen === 'activity' && <Activity onNew={() => startBooking(SERVICES[0].id)} />}
 
-        {screen === 'help' && <Help />}
+        {screen === 'help' && <Help onBack={() => setScreen('profile')} />}
 
         {screen === 'profile' && (
           <Profile
@@ -152,20 +161,8 @@ export default function App() {
                 status: 'upcoming',
                 createdAt: Date.now(),
               })
-              setPaidWith(m)
-              setScreen('tracking')
-            }}
-          />
-        )}
-
-        {screen === 'tracking' && (
-          <Tracking
-            booking={booking}
-            method={paidWith}
-            onDone={() => {
-              setBooking(EMPTY)
-              setPaidWith(null)
-              setScreen('home')
+              setJustBooked(true)
+              setScreen('track')
             }}
           />
         )}
@@ -174,7 +171,10 @@ export default function App() {
       {showTabs && (
         <TabBar
           active={screen as Tab}
-          onTab={(t) => setScreen(t)}
+          onTab={(t) => {
+            setJustBooked(false)
+            setScreen(t)
+          }}
           onNew={() => startBooking(SERVICES[0].id)}
         />
       )}

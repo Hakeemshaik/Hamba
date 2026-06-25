@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Illustration from '../components/Illustration'
+import { LogoMark } from '../components/Logo'
 import type { Customer } from '../lib/types'
 
 interface Props {
@@ -16,7 +16,7 @@ export default function SignIn({ onSignIn }: Props) {
   return (
     <div className="screen signin">
       <div className="signin-hero">
-        <span className="signin-badge" aria-hidden><Illustration name="truck" /></span>
+        <span className="signin-badge" aria-hidden><LogoMark size={56} /></span>
         <span className="wordmark signin-word">Hamba</span>
         <h1 className="signin-title">Move anything,<br />the easy way.</h1>
         <p className="signin-sub">Create your account to book moves, deliveries and rubble removal across Johannesburg.</p>

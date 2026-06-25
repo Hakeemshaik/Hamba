@@ -20,7 +20,7 @@ export default function Home({ name, onSelect, onProfile }: Props) {
     <div className="screen screen--tabbed">
       <div className="home-top">
         <div>
-          <p className="home-greet">Hi {firstName} 👋</p>
+          <p className="home-greet">Hi {firstName}</p>
           <p className="home-loc"><Icon name="pin" /> Johannesburg</p>
         </div>
         <button className="home-avatar" onClick={onProfile} aria-label="Your profile">
@@ -72,6 +72,14 @@ export default function Home({ name, onSelect, onProfile }: Props) {
             </span>
           </button>
         ))}
+      </div>
+
+      <div className="glass referral">
+        <div className="referral-text">
+          <strong>Invite friends, get R50</strong>
+          <span>You both save R50 on your next move.</span>
+        </div>
+        <span className="referral-code">HAMBA50</span>
       </div>
     </div>
   )

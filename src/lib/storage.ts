@@ -94,3 +94,16 @@ export function saveBookingLocal(rec: BookingRecord): void {
   list.push(rec)
   write(KEY_BOOKINGS, list)
 }
+
+export function updateBookingStatus(id: string, status: BookingRecord['status']): void {
+  const list = read<BookingRecord[]>(KEY_BOOKINGS, [])
+  const found = list.find((b) => b.id === id)
+  if (found) {
+    found.status = status
+    write(KEY_BOOKINGS, list)
+  }
+}
+
+export function latestBooking(): BookingRecord | null {
+  return loadBookings()[0] ?? null
+}

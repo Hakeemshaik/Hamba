@@ -7,11 +7,19 @@ const FAQ = [
   { q: 'Which areas do you cover?', a: 'We’re live in Johannesburg, with Pretoria and Cape Town coming soon.' },
 ]
 
-export default function Help() {
+interface Props {
+  onBack: () => void
+}
+
+export default function Help({ onBack }: Props) {
   return (
-    <div className="screen screen--tabbed">
-      <div className="app-bar">
-        <span className="wordmark">Help &amp; support</span>
+    <div className="screen">
+      <div className="topbar">
+        <button className="ghost-btn" onClick={onBack} aria-label="Back">
+          <Icon name="back" />
+        </button>
+        <span className="topbar-title">Help &amp; support</span>
+        <span className="ghost-spacer" />
       </div>
       <p className="lede">We’re here when you need us. Reach a real person, or browse the common questions below.</p>
 

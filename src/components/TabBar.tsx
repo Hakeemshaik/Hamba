@@ -1,6 +1,6 @@
 import Icon from './Icon'
 
-export type Tab = 'home' | 'activity' | 'help' | 'profile'
+export type Tab = 'home' | 'track' | 'activity' | 'profile'
 
 interface Props {
   active: Tab
@@ -10,10 +10,10 @@ interface Props {
 
 const LEFT: { id: Tab; icon: string; label: string }[] = [
   { id: 'home', icon: 'home', label: 'Home' },
-  { id: 'activity', icon: 'list', label: 'Trips' },
+  { id: 'track', icon: 'pin', label: 'Track' },
 ]
 const RIGHT: { id: Tab; icon: string; label: string }[] = [
-  { id: 'help', icon: 'help', label: 'Help' },
+  { id: 'activity', icon: 'list', label: 'Trips' },
   { id: 'profile', icon: 'user', label: 'Profile' },
 ]
 
