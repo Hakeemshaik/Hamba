@@ -60,3 +60,26 @@ This is a complete, working front end. Two pieces use placeholders so the app ru
    - Never put your Yoco **secret key** in this front-end; charges must be created from a small backend.
 
 A simple backend (one endpoint to create a Yoco checkout + a webhook to confirm payment) is the natural next step — say the word and I'll add it.
+
+## Going live — the free path
+
+The app runs today on **local storage** (bookings save to the device, no account needed). To turn on a real cloud database so bookings/customers are stored centrally, with **no code changes**:
+
+1. Create a free project at [supabase.com](https://supabase.com).
+2. Open **SQL Editor**, paste [`supabase/schema.sql`](supabase/schema.sql), and **Run** it.
+3. In **Project Settings → API**, copy the **Project URL** and **anon public key**.
+4. Copy `.env.example` to `.env` and paste them in:
+   ```
+   VITE_SUPABASE_URL=https://xxxx.supabase.co
+   VITE_SUPABASE_ANON_KEY=eyJ...
+   ```
+   (On Vercel, add these two as Environment Variables instead.)
+5. Redeploy. Bookings now mirror to Supabase; nothing breaks if the keys are absent.
+
+The anon key is **safe in the frontend** — Row Level Security (in the schema) only allows creating rows, never listing other people's data.
+
+### Real payments (Yoco)
+Taking real money needs a tiny server endpoint (Supabase Edge Function) that creates a Yoco **Online Checkout** with your **secret** key — which must never live in the frontend — plus a webhook to confirm payment. This is the one piece that needs your Yoco account; ask and I'll add the function + wire `Payment.tsx` to it.
+
+### Distance-based pricing
+Pricing currently uses a built-in suburb list (free, no API). For exact road distances, plug in **Google Distance Matrix** (≈US$0.005/lookup, covered by Google's standing **$200/month free credit** — ~40k quotes/month free) or **Mapbox** (100k free/month). Free-only alternatives: a hand-built suburb-to-suburb zone table, or the open-source **OSRM / OpenRouteService** APIs.

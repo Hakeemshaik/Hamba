@@ -2,11 +2,27 @@ import type { Customer } from './types'
 
 const KEY_PROFILE = 'hamba.profile.v1'
 const KEY_ADDR = 'hamba.addresses.v1'
+const KEY_BOOKINGS = 'hamba.bookings.v1'
 
 export interface RecentAddress {
   value: string
   count: number
   at: number
+}
+
+export interface BookingRecord {
+  id: string
+  serviceId: string
+  serviceName: string
+  icon: string
+  pickup: string
+  dropoff: string
+  date: string
+  time: string
+  total: number
+  method: string
+  status: 'upcoming' | 'active' | 'completed' | 'cancelled'
+  createdAt: number
 }
 
 function read<T>(key: string, fallback: T): T {
@@ -67,4 +83,14 @@ export function recordAddress(value: string): RecentAddress[] {
 /** Most-used addresses first, as plain strings. */
 export function topAddresses(limit = 5): string[] {
   return loadAddresses().slice(0, limit).map((a) => a.value)
+}
+
+export function loadBookings(): BookingRecord[] {
+  return read<BookingRecord[]>(KEY_BOOKINGS, []).sort((a, b) => b.createdAt - a.createdAt)
+}
+
+export function saveBookingLocal(rec: BookingRecord): void {
+  const list = read<BookingRecord[]>(KEY_BOOKINGS, [])
+  list.push(rec)
+  write(KEY_BOOKINGS, list)
 }

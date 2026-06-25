@@ -10,8 +10,9 @@ import Profile from './screens/Profile'
 import EditProfile from './screens/EditProfile'
 import Activity from './screens/Activity'
 import Help from './screens/Help'
-import { estimateDistance } from './lib/quote'
-import { SERVICES } from './lib/data'
+import { estimateDistance, calculateQuote } from './lib/quote'
+import { SERVICES, serviceById } from './lib/data'
+import { persistBooking, persistCustomer } from './lib/db'
 import { loadProfile, saveProfile, clearAccount, topAddresses, recordAddress } from './lib/storage'
 import type { Booking as BookingT, Customer, PaymentMethod, ServiceId } from './lib/types'
 
@@ -56,6 +57,7 @@ export default function App() {
 
   const signIn = (c: Customer) => {
     saveProfile(c)
+    persistCustomer(c)
     setProfile(c)
     setScreen('home')
   }
@@ -135,6 +137,21 @@ export default function App() {
             onBack={() => setScreen('booking')}
             setProcessing={setProcessing}
             onPaid={(m) => {
+              const svc = serviceById(booking.service)
+              persistBooking({
+                id: 'HMB-' + Date.now().toString().slice(-6),
+                serviceId: booking.service ?? '',
+                serviceName: svc?.name ?? 'Move',
+                icon: svc?.icon ?? 'boxes',
+                pickup: booking.pickup,
+                dropoff: booking.dropoff,
+                date: booking.date,
+                time: booking.time,
+                total: calculateQuote(booking).total,
+                method: m,
+                status: 'upcoming',
+                createdAt: Date.now(),
+              })
               setPaidWith(m)
               setScreen('tracking')
             }}
