@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { SERVICES } from '../lib/data'
 import type { ServiceId } from '../lib/types'
 import Icon from '../components/Icon'
@@ -7,12 +8,42 @@ interface Props {
   onSelect: (id: ServiceId) => void
 }
 
+const CITIES = [
+  { id: 'jhb', name: 'Johannesburg', live: true },
+  { id: 'pta', name: 'Pretoria', live: false },
+  { id: 'cpt', name: 'Cape Town', live: false },
+]
+
+const FEATURES = [
+  { icon: 'bolt', title: 'Instant quotes', sub: 'See your price upfront' },
+  { icon: 'pin', title: 'Live tracking', sub: 'Watch your truck arrive' },
+  { icon: 'badge', title: 'Vetted drivers', sub: 'ID, licence & insurance' },
+  { icon: 'card', title: 'Secure payment', sub: 'All SA banks via Yoco' },
+]
+
 export default function Home({ onSelect }: Props) {
+  const [city, setCity] = useState('jhb')
+
   return (
     <div className="screen">
       <div className="app-bar">
         <span className="wordmark">Hamba</span>
         <span className="app-bar-tag">Moves &amp; Removals</span>
+      </div>
+
+      <div className="city-row" role="group" aria-label="Service area">
+        {CITIES.map((c) => (
+          <button
+            key={c.id}
+            className={`glass city-pill ${city === c.id ? 'city-pill--on' : ''}`}
+            onClick={() => c.live && setCity(c.id)}
+            disabled={!c.live}
+          >
+            <Icon name="pin" />
+            {c.name}
+            {!c.live && <span className="city-soon">soon</span>}
+          </button>
+        ))}
       </div>
 
       <header className="home-hero">
@@ -46,10 +77,14 @@ export default function Home({ onSelect }: Props) {
         ))}
       </section>
 
-      <section className="trust-row" aria-label="Why Hamba">
-        <div className="glass trust-pill"><Icon name="star" /> 4.9 rated</div>
-        <div className="glass trust-pill"><Icon name="shield" /> Insured loads</div>
-        <div className="glass trust-pill"><Icon name="card" /> All banks</div>
+      <section className="feature-grid" aria-label="Why Hamba">
+        {FEATURES.map((f) => (
+          <div key={f.title} className="glass feature-card">
+            <span className="feature-icon" aria-hidden><Icon name={f.icon} /></span>
+            <span className="feature-title">{f.title}</span>
+            <span className="feature-sub">{f.sub}</span>
+          </div>
+        ))}
       </section>
     </div>
   )

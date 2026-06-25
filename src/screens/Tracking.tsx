@@ -1,6 +1,7 @@
 import { serviceById } from '../lib/data'
 import type { Booking, PaymentMethod } from '../lib/types'
 import Icon from '../components/Icon'
+import DriverCard from '../components/DriverCard'
 
 interface Props {
   booking: Booking
@@ -51,6 +52,9 @@ export default function Tracking({ booking, method, onDone }: Props) {
           <span>{booking.dropoff || 'Drop-off'}</span>
         </div>
       </div>
+
+      <p className="group-label">Your driver</p>
+      <DriverCard />
 
       <p className="group-label">Status</p>
       <div className="glass steps-card">

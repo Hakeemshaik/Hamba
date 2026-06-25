@@ -67,6 +67,19 @@ const ART: Record<string, JSX.Element> = {
       <rect x="33" y="37" width="13" height="3" rx="1.5" fill="#94a3b8" />
     </g>
   ),
+  // Friendly driver avatar
+  driver: (
+    <g>
+      <rect width="64" height="64" rx="32" fill="#e8f0ff" />
+      <path d="M12 58c0-11 9-17 20-17s20 6 20 17Z" fill="#2f6fed" />
+      <path d="M24 42h16v6a8 8 0 0 1-16 0Z" fill="#e8b08a" />
+      <circle cx="32" cy="28" r="13" fill="#f1c19b" />
+      <path d="M19 27c0-8 6-12 13-12s13 4 13 12c-3-3-6-5-13-5s-10 2-13 5Z" fill="#2a2118" />
+      <circle cx="27" cy="28" r="1.6" fill="#2a2118" />
+      <circle cx="37" cy="28" r="1.6" fill="#2a2118" />
+      <path d="M28 33c1.4 1.2 6.6 1.2 8 0" stroke="#9b6a44" strokeWidth="1.6" fill="none" strokeLinecap="round" />
+    </g>
+  ),
   // Instant EFT — bank
   bank: (
     <g>

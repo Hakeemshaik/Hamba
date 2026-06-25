@@ -70,6 +70,21 @@ const PATHS: Record<string, JSX.Element> = {
       <path d="M12 7v5l3 2" />
     </>
   ),
+  phone: <path d="M5.5 4h3l1.8 4.5-2 1.2a11 11 0 0 0 4.8 4.8l1.2-2 4.5 1.8v3a2 2 0 0 1-2.2 2A15.5 15.5 0 0 1 3.5 6.2 2 2 0 0 1 5.5 4Z" />,
+  message: <path d="M5 5h14a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-9l-4 4v-4H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" />,
+  badge: (
+    <>
+      <path d="M12 3 5 6v6c0 4 3 6.5 7 8 4-1.5 7-4 7-8V6l-7-3Z" />
+      <path d="m8.8 12 2.2 2.2L15.4 10" />
+    </>
+  ),
+  bolt: <path d="M13 3 5 13h5.5L9 21l9-11h-5.5L13 3Z" />,
+  calendar: (
+    <>
+      <rect x="4" y="5" width="16" height="16" rx="2.5" />
+      <path d="M8 3v4M16 3v4M4 10h16" />
+    </>
+  ),
 }
 
 export default function Icon({ name, className }: IconProps) {
