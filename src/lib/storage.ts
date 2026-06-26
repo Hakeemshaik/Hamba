@@ -1,10 +1,12 @@
-import type { Customer } from './types'
+import type { Customer, Driver, Role } from './types'
 
 const KEY_PROFILE = 'hamba.profile.v1'
 const KEY_ADDR = 'hamba.addresses.v1'
 const KEY_BOOKINGS = 'hamba.bookings.v1'
 const KEY_COMPLAINTS = 'hamba.complaints.v1'
 const KEY_MESSAGES = 'hamba.messages.v1'
+const KEY_ROLE = 'hamba.role.v1'
+const KEY_DRIVER = 'hamba.driver.v1'
 
 export interface RecentAddress {
   value: string
@@ -24,6 +26,7 @@ export interface BookingRecord {
   total: number
   method: string
   status: 'upcoming' | 'active' | 'completed' | 'cancelled'
+  driverName?: string
   createdAt: number
 }
 
@@ -55,9 +58,27 @@ export function saveProfile(c: Customer): void {
 export function clearAccount(): void {
   try {
     localStorage.removeItem(KEY_PROFILE)
+    localStorage.removeItem(KEY_DRIVER)
+    localStorage.removeItem(KEY_ROLE)
   } catch {
     /* ignore */
   }
+}
+
+export function loadRole(): Role | null {
+  return read<Role | null>(KEY_ROLE, null)
+}
+
+export function saveRole(r: Role): void {
+  write(KEY_ROLE, r)
+}
+
+export function loadDriver(): Driver | null {
+  return read<Driver | null>(KEY_DRIVER, null)
+}
+
+export function saveDriver(d: Driver): void {
+  write(KEY_DRIVER, d)
 }
 
 export function loadAddresses(): RecentAddress[] {
@@ -98,10 +119,14 @@ export function saveBookingLocal(rec: BookingRecord): void {
 }
 
 export function updateBookingStatus(id: string, status: BookingRecord['status']): void {
+  updateBooking(id, { status })
+}
+
+export function updateBooking(id: string, patch: Partial<BookingRecord>): void {
   const list = read<BookingRecord[]>(KEY_BOOKINGS, [])
   const found = list.find((b) => b.id === id)
   if (found) {
-    found.status = status
+    Object.assign(found, patch)
     write(KEY_BOOKINGS, list)
   }
 }

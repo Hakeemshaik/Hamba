@@ -27,6 +27,42 @@ export interface Customer {
   address: string
 }
 
+export type Role = 'customer' | 'driver'
+
+export type DriverStatus = 'incomplete' | 'pending' | 'approved' | 'suspended'
+
+export interface Driver {
+  name: string
+  phone: string
+  email: string
+  idNumber: string
+  licenceNumber: string
+  licenceCode: string
+  licenceExpiry: string
+  vehicleType: string
+  vehicleMake: string
+  vehicleModel: string
+  vehicleReg: string
+  vehicleYear: string
+  bankHolder: string
+  bankName: string
+  bankAccount: string
+  docId: string
+  docLicence: string
+  docDisc: string
+  docInsurance: string
+  status: DriverStatus
+}
+
+export const EMPTY_DRIVER: Driver = {
+  name: '', phone: '', email: '', idNumber: '',
+  licenceNumber: '', licenceCode: '', licenceExpiry: '',
+  vehicleType: '', vehicleMake: '', vehicleModel: '', vehicleReg: '', vehicleYear: '',
+  bankHolder: '', bankName: '', bankAccount: '',
+  docId: '', docLicence: '', docDisc: '', docInsurance: '',
+  status: 'incomplete',
+}
+
 export type LoadSize = 'small' | 'medium' | 'large' | 'xl'
 
 export interface LoadOption {

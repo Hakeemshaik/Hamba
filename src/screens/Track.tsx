@@ -73,7 +73,7 @@ export default function Track({ justBooked, onBook, onHelp }: Props) {
       </div>
 
       <p className="group-label">Your driver</p>
-      <DriverCard />
+      <DriverCard name={booking.driverName} />
 
       <p className="group-label">Status</p>
       <div className="glass steps-card">

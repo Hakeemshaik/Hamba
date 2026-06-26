@@ -12,11 +12,16 @@ import Activity from './screens/Activity'
 import Help from './screens/Help'
 import ContactUs from './screens/ContactUs'
 import Complaint from './screens/Complaint'
+import DriverApp from './driver/DriverApp'
 import { estimateDistance, calculateQuote } from './lib/quote'
 import { SERVICES, serviceById } from './lib/data'
 import { persistBooking, persistCustomer } from './lib/db'
-import { loadProfile, saveProfile, clearAccount, topAddresses, recordAddress } from './lib/storage'
-import type { Booking as BookingT, Customer, ServiceId } from './lib/types'
+import {
+  loadProfile, saveProfile, clearAccount, topAddresses, recordAddress,
+  loadRole, saveRole, loadDriver, saveDriver,
+} from './lib/storage'
+import { EMPTY_DRIVER } from './lib/types'
+import type { Booking as BookingT, Customer, Driver, Role, ServiceId } from './lib/types'
 
 type Screen = Tab | 'signin' | 'editProfile' | 'help' | 'contact' | 'complaint' | 'booking' | 'payment'
 
@@ -36,7 +41,9 @@ const TAB_SCREENS: Screen[] = ['home', 'track', 'activity', 'profile']
 
 export default function App() {
   const [profile, setProfile] = useState<Customer | null>(() => loadProfile())
-  const [screen, setScreen] = useState<Screen>(() => (loadProfile() ? 'home' : 'signin'))
+  const [role, setRole] = useState<Role | null>(() => loadRole())
+  const [driver, setDriver] = useState<Driver | null>(() => loadDriver())
+  const [screen, setScreen] = useState<Screen>('home')
   const [booking, setBooking] = useState<BookingT>(EMPTY)
   const [processing, setProcessing] = useState<string | null>(null)
   const [justBooked, setJustBooked] = useState(false)
@@ -58,17 +65,28 @@ export default function App() {
     setScreen('booking')
   }
 
-  const signIn = (c: Customer) => {
-    saveProfile(c)
-    persistCustomer(c)
-    setProfile(c)
-    setScreen('home')
+  const signIn = (r: Role, basic: { name: string; phone: string; email: string }) => {
+    saveRole(r)
+    setRole(r)
+    if (r === 'driver') {
+      const d: Driver = { ...EMPTY_DRIVER, name: basic.name, phone: basic.phone, email: basic.email }
+      saveDriver(d)
+      setDriver(d)
+    } else {
+      const c: Customer = { ...basic, address: '' }
+      saveProfile(c)
+      persistCustomer(c)
+      setProfile(c)
+      setScreen('home')
+    }
   }
 
   const logout = () => {
     clearAccount()
     setProfile(null)
-    setScreen('signin')
+    setDriver(null)
+    setRole(null)
+    setScreen('home')
   }
 
   const goToPayment = () => {
@@ -79,7 +97,7 @@ export default function App() {
 
   const showTabs = TAB_SCREENS.includes(screen)
 
-  if (screen === 'signin' || !profile) {
+  if (!role || (role === 'customer' && !profile)) {
     return (
       <div className="app">
         <main className="app-main">
@@ -88,6 +106,12 @@ export default function App() {
       </div>
     )
   }
+
+  if (role === 'driver' && driver) {
+    return <DriverApp initialDriver={driver} onLogout={logout} />
+  }
+
+  if (!profile) return null
 
   return (
     <div className="app">

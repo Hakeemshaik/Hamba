@@ -8,7 +8,7 @@ import {
   type MessageRecord,
 } from './storage'
 import { remoteInsert } from './supabase'
-import type { Customer } from './types'
+import type { Customer, Driver } from './types'
 
 /**
  * Persistence layer. Writes to local storage always (so the app works with
@@ -43,6 +43,27 @@ export function persistComplaint(rec: ComplaintRecord): void {
     booking_ref: rec.reference,
     message: rec.message,
     created_at: new Date(rec.createdAt).toISOString(),
+  })
+}
+
+export function persistDriver(d: Driver): void {
+  remoteInsert('drivers', {
+    name: d.name,
+    phone: d.phone,
+    email: d.email,
+    id_number: d.idNumber,
+    licence_number: d.licenceNumber,
+    licence_code: d.licenceCode,
+    licence_expiry: d.licenceExpiry || null,
+    vehicle_type: d.vehicleType,
+    vehicle_make: d.vehicleMake,
+    vehicle_model: d.vehicleModel,
+    vehicle_reg: d.vehicleReg,
+    vehicle_year: d.vehicleYear,
+    bank_holder: d.bankHolder,
+    bank_name: d.bankName,
+    bank_account: d.bankAccount,
+    status: d.status,
   })
 }
 

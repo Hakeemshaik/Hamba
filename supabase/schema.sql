@@ -38,6 +38,31 @@ create policy "anon can create customers" on customers
 create policy "anon can create bookings" on bookings
   for insert to anon with check (true);
 
+create table if not exists drivers (
+  id             uuid primary key default gen_random_uuid(),
+  name           text not null,
+  phone          text not null,
+  email          text,
+  id_number      text,
+  licence_number text,
+  licence_code   text,
+  licence_expiry date,
+  vehicle_type   text,
+  vehicle_make   text,
+  vehicle_model  text,
+  vehicle_reg    text,
+  vehicle_year   text,
+  bank_holder    text,
+  bank_name      text,
+  bank_account   text,
+  status         text not null default 'pending',  -- pending | approved | suspended
+  created_at     timestamptz not null default now()
+);
+
+alter table drivers enable row level security;
+create policy "anon can create drivers" on drivers
+  for insert to anon with check (true);
+
 create table if not exists complaints (
   id          text primary key,             -- e.g. CMP-481204
   category    text not null,
