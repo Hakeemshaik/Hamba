@@ -3,6 +3,8 @@ import type { Customer } from './types'
 const KEY_PROFILE = 'hamba.profile.v1'
 const KEY_ADDR = 'hamba.addresses.v1'
 const KEY_BOOKINGS = 'hamba.bookings.v1'
+const KEY_COMPLAINTS = 'hamba.complaints.v1'
+const KEY_MESSAGES = 'hamba.messages.v1'
 
 export interface RecentAddress {
   value: string
@@ -106,4 +108,31 @@ export function updateBookingStatus(id: string, status: BookingRecord['status'])
 
 export function latestBooking(): BookingRecord | null {
   return loadBookings()[0] ?? null
+}
+
+export interface ComplaintRecord {
+  id: string
+  category: string
+  reference: string
+  message: string
+  createdAt: number
+}
+
+export function saveComplaintLocal(rec: ComplaintRecord): void {
+  const list = read<ComplaintRecord[]>(KEY_COMPLAINTS, [])
+  list.push(rec)
+  write(KEY_COMPLAINTS, list)
+}
+
+export interface MessageRecord {
+  id: string
+  name: string
+  message: string
+  createdAt: number
+}
+
+export function saveMessageLocal(rec: MessageRecord): void {
+  const list = read<MessageRecord[]>(KEY_MESSAGES, [])
+  list.push(rec)
+  write(KEY_MESSAGES, list)
 }

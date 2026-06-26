@@ -1,4 +1,12 @@
-import { saveBookingLocal, loadBookings, type BookingRecord } from './storage'
+import {
+  saveBookingLocal,
+  loadBookings,
+  saveComplaintLocal,
+  saveMessageLocal,
+  type BookingRecord,
+  type ComplaintRecord,
+  type MessageRecord,
+} from './storage'
 import { remoteInsert } from './supabase'
 import type { Customer } from './types'
 
@@ -25,6 +33,27 @@ export function persistBooking(rec: BookingRecord): void {
 
 export function persistCustomer(c: Customer): void {
   remoteInsert('customers', { name: c.name, phone: c.phone, email: c.email, address: c.address })
+}
+
+export function persistComplaint(rec: ComplaintRecord): void {
+  saveComplaintLocal(rec)
+  remoteInsert('complaints', {
+    id: rec.id,
+    category: rec.category,
+    booking_ref: rec.reference,
+    message: rec.message,
+    created_at: new Date(rec.createdAt).toISOString(),
+  })
+}
+
+export function persistMessage(rec: MessageRecord): void {
+  saveMessageLocal(rec)
+  remoteInsert('messages', {
+    id: rec.id,
+    name: rec.name,
+    message: rec.message,
+    created_at: new Date(rec.createdAt).toISOString(),
+  })
 }
 
 export { loadBookings }

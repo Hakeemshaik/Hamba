@@ -37,3 +37,28 @@ create policy "anon can create customers" on customers
 
 create policy "anon can create bookings" on bookings
   for insert to anon with check (true);
+
+create table if not exists complaints (
+  id          text primary key,             -- e.g. CMP-481204
+  category    text not null,
+  booking_ref text,
+  message     text not null,
+  status      text not null default 'open',
+  created_at  timestamptz not null default now()
+);
+
+create table if not exists messages (
+  id          text primary key,             -- e.g. MSG-481204
+  name        text,
+  message     text not null,
+  created_at  timestamptz not null default now()
+);
+
+alter table complaints enable row level security;
+alter table messages   enable row level security;
+
+create policy "anon can create complaints" on complaints
+  for insert to anon with check (true);
+
+create policy "anon can create messages" on messages
+  for insert to anon with check (true);

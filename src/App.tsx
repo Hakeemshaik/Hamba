@@ -10,13 +10,15 @@ import Profile from './screens/Profile'
 import EditProfile from './screens/EditProfile'
 import Activity from './screens/Activity'
 import Help from './screens/Help'
+import ContactUs from './screens/ContactUs'
+import Complaint from './screens/Complaint'
 import { estimateDistance, calculateQuote } from './lib/quote'
 import { SERVICES, serviceById } from './lib/data'
 import { persistBooking, persistCustomer } from './lib/db'
 import { loadProfile, saveProfile, clearAccount, topAddresses, recordAddress } from './lib/storage'
 import type { Booking as BookingT, Customer, ServiceId } from './lib/types'
 
-type Screen = Tab | 'signin' | 'editProfile' | 'help' | 'booking' | 'payment'
+type Screen = Tab | 'signin' | 'editProfile' | 'help' | 'contact' | 'complaint' | 'booking' | 'payment'
 
 const EMPTY: BookingT = {
   service: null,
@@ -108,12 +110,18 @@ export default function App() {
 
         {screen === 'help' && <Help onBack={() => setScreen('profile')} />}
 
+        {screen === 'contact' && <ContactUs name={profile.name} onBack={() => setScreen('profile')} />}
+
+        {screen === 'complaint' && <Complaint onBack={() => setScreen('profile')} />}
+
         {screen === 'profile' && (
           <Profile
             profile={profile}
             onEdit={() => setScreen('editProfile')}
             onActivity={() => setScreen('activity')}
             onHelp={() => setScreen('help')}
+            onContact={() => setScreen('contact')}
+            onComplaint={() => setScreen('complaint')}
             onLogout={logout}
           />
         )}

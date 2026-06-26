@@ -646,6 +646,25 @@ svg { display: block; width: 100%; height: 100%; }
 .track-actions { display: flex; gap: 10px; margin-top: 4px; }
 .track-cancel { color: var(--block, #c0392b); background: rgba(192, 57, 43, 0.08); border-color: rgba(192, 57, 43, 0.2); }
 
+/* ---------- Complaint categories ---------- */
+.cat-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+.cat-wrap .cat-chip { flex: none; }
+
+/* ---------- Contact us ---------- */
+.contact-list { display: flex; flex-direction: column; gap: 10px; }
+.contact-row { display: flex; align-items: center; gap: 13px; padding: 15px 16px; width: 100%; text-align: left; transition: transform 0.2s; }
+.contact-row:active { transform: scale(0.985); }
+.contact-ico { width: 40px; height: 40px; border-radius: 12px; flex: none; display: grid; place-items: center; padding: 10px; color: #fff; background: var(--accent); }
+.contact-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.contact-label { font-size: 15px; font-weight: 600; }
+.contact-value { font-size: 12.5px; color: var(--muted); }
+.contact-send { margin-top: 4px; }
+.contact-sent { display: flex; align-items: center; gap: 12px; padding: 16px 18px; }
+.contact-sent-tick { width: 32px; height: 32px; border-radius: 50%; flex: none; display: grid; place-items: center; padding: 7px; background: #16855a; color: #fff; }
+.contact-sent div { display: flex; flex-direction: column; }
+.contact-sent strong { font-size: 14.5px; font-weight: 650; }
+.contact-sent span { font-size: 12.5px; color: var(--muted); }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }

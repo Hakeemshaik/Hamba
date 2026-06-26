@@ -141,6 +141,19 @@ const PATHS: Record<string, JSX.Element> = {
     </>
   ),
   arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
+  alert: (
+    <>
+      <path d="M12 4.5 2.8 20.5h18.4L12 4.5Z" />
+      <path d="M12 10.5v4" />
+      <path d="M12 17.6h.01" />
+    </>
+  ),
+  mail: (
+    <>
+      <rect x="3" y="5.5" width="18" height="13" rx="2.5" />
+      <path d="m4 7 8 6 8-6" />
+    </>
+  ),
   calendar: (
     <>
       <rect x="4" y="5" width="16" height="16" rx="2.5" />
