@@ -35,31 +35,61 @@ export interface Driver {
   name: string
   phone: string
   email: string
+  // Identity
+  idType: string // 'ID' | 'Passport'
   idNumber: string
+  docId: string
+  docSelfie: string
+  docAddress: string // proof of address
+  // Licence
   licenceNumber: string
   licenceCode: string
   licenceExpiry: string
+  hasPrdp: boolean
+  docPrdp: string
+  // Consent / declarations
+  criminalConsent: boolean
+  drivingConsent: boolean
+  // Vehicle
   vehicleType: string
   vehicleMake: string
   vehicleModel: string
   vehicleReg: string
   vehicleYear: string
+  loadCapacity: string
+  vehicleDims: string
+  assistants: number
+  // Vehicle documents
+  docRegistration: string
+  docDisc: string
+  docRoadworthy: string
+  docInsurance: string
+  commercialCover: boolean
+  // Photos
+  docTruckPhoto: string
+  docEquipment: string
+  // References & training
+  refName: string
+  refPhone: string
+  trainingAck: boolean
+  // Payout
   bankHolder: string
   bankName: string
   bankAccount: string
-  docId: string
-  docLicence: string
-  docDisc: string
-  docInsurance: string
   status: DriverStatus
 }
 
 export const EMPTY_DRIVER: Driver = {
-  name: '', phone: '', email: '', idNumber: '',
-  licenceNumber: '', licenceCode: '', licenceExpiry: '',
+  name: '', phone: '', email: '',
+  idType: 'ID', idNumber: '', docId: '', docSelfie: '', docAddress: '',
+  licenceNumber: '', licenceCode: '', licenceExpiry: '', hasPrdp: false, docPrdp: '',
+  criminalConsent: false, drivingConsent: false,
   vehicleType: '', vehicleMake: '', vehicleModel: '', vehicleReg: '', vehicleYear: '',
+  loadCapacity: '', vehicleDims: '', assistants: 0,
+  docRegistration: '', docDisc: '', docRoadworthy: '', docInsurance: '', commercialCover: false,
+  docTruckPhoto: '', docEquipment: '',
+  refName: '', refPhone: '', trainingAck: false,
   bankHolder: '', bankName: '', bankAccount: '',
-  docId: '', docLicence: '', docDisc: '', docInsurance: '',
   status: 'incomplete',
 }
 

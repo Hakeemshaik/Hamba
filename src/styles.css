@@ -724,6 +724,10 @@ svg { display: block; width: 100%; height: 100%; }
 .driver-badge--approved { color: #16855a; background: rgba(22, 133, 90, 0.14); }
 .driver-badge--incomplete, .driver-badge--suspended { color: var(--block, #c0392b); background: rgba(192, 57, 43, 0.12); }
 
+/* ---------- Driver: consent toggles ---------- */
+.check-row { display: flex; align-items: center; gap: 13px; padding: 15px 16px; width: 100%; text-align: left; transition: transform 0.15s; }
+.check-row:active { transform: scale(0.99); }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }

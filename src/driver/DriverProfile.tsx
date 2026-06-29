@@ -17,12 +17,17 @@ const STATUS_LABEL: Record<string, string> = {
 
 export default function DriverProfile({ driver, onEdit, onLogout }: Props) {
   const docs = [
-    { label: 'SA ID document', on: !!driver.docId },
-    { label: 'Driver’s licence', on: !!driver.docLicence },
-    { label: 'Vehicle licence disc', on: !!driver.docDisc },
+    { label: `${driver.idType} document`, on: !!driver.docId },
+    { label: 'Selfie / liveness', on: !!driver.docSelfie },
+    { label: 'Proof of address', on: !!driver.docAddress },
+    { label: 'Vehicle registration', on: !!driver.docRegistration },
+    { label: 'Licence disc', on: !!driver.docDisc },
+    { label: 'Roadworthy certificate', on: !!driver.docRoadworthy },
     { label: 'Insurance certificate', on: !!driver.docInsurance },
+    { label: 'Truck photo', on: !!driver.docTruckPhoto },
   ]
   const acct = driver.bankAccount ? `••••${driver.bankAccount.slice(-4)}` : '—'
+  const yn = (b: boolean) => (b ? 'Yes' : 'No')
 
   return (
     <div className="screen screen--tabbed">
@@ -40,7 +45,17 @@ export default function DriverProfile({ driver, onEdit, onLogout }: Props) {
         <div className="info-row"><span>Type</span><span>{driver.vehicleType || '—'}</span></div>
         <div className="info-row"><span>Vehicle</span><span>{[driver.vehicleMake, driver.vehicleModel].filter(Boolean).join(' ') || '—'}</span></div>
         <div className="info-row"><span>Registration</span><span>{driver.vehicleReg || '—'}</span></div>
-        <div className="info-row"><span>Year</span><span>{driver.vehicleYear || '—'}</span></div>
+        <div className="info-row"><span>Load capacity</span><span>{driver.loadCapacity || '—'}</span></div>
+        <div className="info-row"><span>Assistants</span><span>{driver.assistants}</span></div>
+      </div>
+
+      <p className="group-label">Checks</p>
+      <div className="glass info-card">
+        <div className="info-row"><span>Criminal check</span><span className={driver.criminalConsent ? 'doc-ok' : 'doc-missing'}>{driver.criminalConsent ? 'Consented' : 'Pending'}</span></div>
+        <div className="info-row"><span>Driving record</span><span className={driver.drivingConsent ? 'doc-ok' : 'doc-missing'}>{driver.drivingConsent ? 'Consented' : 'Pending'}</span></div>
+        <div className="info-row"><span>PrDP</span><span>{yn(driver.hasPrdp)}</span></div>
+        <div className="info-row"><span>Commercial cover</span><span>{yn(driver.commercialCover)}</span></div>
+        <div className="info-row"><span>Training</span><span className={driver.trainingAck ? 'doc-ok' : 'doc-missing'}>{driver.trainingAck ? 'Agreed' : 'Pending'}</span></div>
       </div>
 
       <p className="group-label">Licence</p>

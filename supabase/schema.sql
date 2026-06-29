@@ -39,24 +39,35 @@ create policy "anon can create bookings" on bookings
   for insert to anon with check (true);
 
 create table if not exists drivers (
-  id             uuid primary key default gen_random_uuid(),
-  name           text not null,
-  phone          text not null,
-  email          text,
-  id_number      text,
-  licence_number text,
-  licence_code   text,
-  licence_expiry date,
-  vehicle_type   text,
-  vehicle_make   text,
-  vehicle_model  text,
-  vehicle_reg    text,
-  vehicle_year   text,
-  bank_holder    text,
-  bank_name      text,
-  bank_account   text,
-  status         text not null default 'pending',  -- pending | approved | suspended
-  created_at     timestamptz not null default now()
+  id               uuid primary key default gen_random_uuid(),
+  name             text not null,
+  phone            text not null,
+  email            text,
+  id_type          text,
+  id_number        text,
+  licence_number   text,
+  licence_code     text,
+  licence_expiry   date,
+  has_prdp         boolean,
+  criminal_consent boolean,
+  driving_consent  boolean,
+  vehicle_type     text,
+  vehicle_make     text,
+  vehicle_model    text,
+  vehicle_reg      text,
+  vehicle_year     text,
+  load_capacity    text,
+  vehicle_dims     text,
+  assistants       int,
+  commercial_cover boolean,
+  ref_name         text,
+  ref_phone        text,
+  training_ack     boolean,
+  bank_holder      text,
+  bank_name        text,
+  bank_account     text,
+  status           text not null default 'pending',  -- pending | approved | suspended
+  created_at       timestamptz not null default now()
 );
 
 alter table drivers enable row level security;
