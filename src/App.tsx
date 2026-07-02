@@ -13,6 +13,7 @@ import Help from './screens/Help'
 import ContactUs from './screens/ContactUs'
 import Complaint from './screens/Complaint'
 import DriverApp from './driver/DriverApp'
+import { DEMO_DRIVER, resetDemoJobs } from './driver/demo'
 import { estimateDistance, calculateQuote } from './lib/quote'
 import { SERVICES, serviceById } from './lib/data'
 import { persistBooking, persistCustomer } from './lib/db'
@@ -43,6 +44,7 @@ export default function App() {
   const [profile, setProfile] = useState<Customer | null>(() => loadProfile())
   const [role, setRole] = useState<Role | null>(() => loadRole())
   const [driver, setDriver] = useState<Driver | null>(() => loadDriver())
+  const [demoDriver, setDemoDriver] = useState(false)
   const [screen, setScreen] = useState<Screen>('home')
   const [booking, setBooking] = useState<BookingT>(EMPTY)
   const [processing, setProcessing] = useState<string | null>(null)
@@ -97,11 +99,21 @@ export default function App() {
 
   const showTabs = TAB_SCREENS.includes(screen)
 
+  if (demoDriver) {
+    return <DriverApp initialDriver={DEMO_DRIVER} demo onLogout={() => setDemoDriver(false)} />
+  }
+
   if (!role || (role === 'customer' && !profile)) {
     return (
       <div className="app">
         <main className="app-main">
-          <SignIn onSignIn={signIn} />
+          <SignIn
+            onSignIn={signIn}
+            onDemoDriver={() => {
+              resetDemoJobs()
+              setDemoDriver(true)
+            }}
+          />
         </main>
       </div>
     )

@@ -11,6 +11,7 @@ import DriverProfile from './DriverProfile'
 
 interface Props {
   initialDriver: Driver
+  demo?: boolean
   onLogout: () => void
 }
 
@@ -23,20 +24,30 @@ const TABS: { id: DScreen; icon: string; label: string }[] = [
   { id: 'profile', icon: 'user', label: 'Profile' },
 ]
 
-export default function DriverApp({ initialDriver, onLogout }: Props) {
+export default function DriverApp({ initialDriver, demo, onLogout }: Props) {
   const [driver, setDriver] = useState<Driver>(initialDriver)
   const [screen, setScreen] = useState<DScreen>('home')
-  const [online, setOnline] = useState(false)
+  const [online, setOnline] = useState(demo ?? false)
 
   const save = (d: Driver) => {
-    saveDriver(d)
-    persistDriver(d)
+    if (!demo) {
+      saveDriver(d)
+      persistDriver(d)
+    }
     setDriver(d)
   }
+
+  const demoBar = demo ? (
+    <div className="demo-bar" role="status">
+      <span>Demo mode — sample data for preview only</span>
+      <button onClick={onLogout}>Exit</button>
+    </div>
+  ) : null
 
   if (driver.status === 'incomplete') {
     return (
       <div className="app">
+        {demoBar}
         <main className="app-main">
           <DriverOnboarding
             initial={driver}
@@ -54,6 +65,7 @@ export default function DriverApp({ initialDriver, onLogout }: Props) {
   if (screen === 'edit') {
     return (
       <div className="app">
+        {demoBar}
         <main className="app-main">
           <DriverOnboarding
             initial={driver}
@@ -71,12 +83,13 @@ export default function DriverApp({ initialDriver, onLogout }: Props) {
 
   return (
     <div className="app">
-      <main className="app-main">
+      {demoBar}
+      <main className={`app-main ${demo ? 'app-main--demo' : ''}`}>
         {screen === 'home' && (
-          <DriverHome driver={driver} online={online} onToggleOnline={() => setOnline((o) => !o)} onJobs={() => setScreen('jobs')} />
+          <DriverHome driver={driver} online={online} demo={demo} onToggleOnline={() => setOnline((o) => !o)} onJobs={() => setScreen('jobs')} />
         )}
-        {screen === 'jobs' && <DriverJobs driver={driver} />}
-        {screen === 'earnings' && <DriverEarnings driver={driver} />}
+        {screen === 'jobs' && <DriverJobs driver={driver} demo={demo} />}
+        {screen === 'earnings' && <DriverEarnings driver={driver} demo={demo} />}
         {screen === 'profile' && <DriverProfile driver={driver} onEdit={() => setScreen('edit')} onLogout={onLogout} />}
       </main>
 

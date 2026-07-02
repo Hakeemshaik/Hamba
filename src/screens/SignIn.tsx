@@ -5,9 +5,10 @@ import type { Role } from '../lib/types'
 
 interface Props {
   onSignIn: (role: Role, basic: { name: string; phone: string; email: string }) => void
+  onDemoDriver: () => void
 }
 
-export default function SignIn({ onSignIn }: Props) {
+export default function SignIn({ onSignIn, onDemoDriver }: Props) {
   const [role, setRole] = useState<Role>('customer')
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
@@ -21,7 +22,13 @@ export default function SignIn({ onSignIn }: Props) {
       <div className="signin-hero">
         <span className="signin-badge" aria-hidden><LogoMark size={56} /></span>
         <span className="wordmark signin-word">Hamba</span>
-        <h1 className="signin-title">{isDriver ? 'Drive with Hamba.' : 'Move anything,\nthe easy way.'}</h1>
+        <h1 className="signin-title">
+          {isDriver ? (
+            <>Drive with Hamba.<br />Earn on your schedule.</>
+          ) : (
+            <>Move anything,<br />the easy way.</>
+          )}
+        </h1>
         <p className="signin-sub">
           {isDriver
             ? 'Register your vehicle, get verified, and start accepting jobs across Johannesburg.'
@@ -57,8 +64,14 @@ export default function SignIn({ onSignIn }: Props) {
         </label>
       </div>
 
+      {isDriver && (
+        <button className="demo-link" onClick={onDemoDriver}>
+          Preview the driver app with sample data
+        </button>
+      )}
+
       <div className="sticky-cta">
-        <p className="secure-note">Your details are saved on this device so you don’t re-enter them.</p>
+        <p className="secure-note">By continuing you agree to our Terms of Service and Privacy Policy.</p>
         <button
           className="primary-btn"
           disabled={!ready}

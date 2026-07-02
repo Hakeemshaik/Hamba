@@ -1,18 +1,20 @@
 import { loadBookings } from '../lib/storage'
 import { formatZar } from '../lib/quote'
 import Icon from '../components/Icon'
+import { getDemoJobs } from './demo'
 import type { Driver } from '../lib/types'
 
 interface Props {
   driver: Driver
   online: boolean
+  demo?: boolean
   onToggleOnline: () => void
   onJobs: () => void
 }
 
-export default function DriverHome({ driver, online, onToggleOnline, onJobs }: Props) {
+export default function DriverHome({ driver, online, demo, onToggleOnline, onJobs }: Props) {
   const me = driver.name
-  const all = loadBookings()
+  const all = demo ? getDemoJobs() : loadBookings()
   const active = all.filter((b) => b.status === 'active' && b.driverName === me).length
   const completed = all.filter((b) => b.status === 'completed' && b.driverName === me)
   const earned = completed.reduce((s, b) => s + b.total * 0.85, 0)

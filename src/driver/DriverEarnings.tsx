@@ -1,15 +1,18 @@
 import { loadBookings } from '../lib/storage'
 import { formatZar } from '../lib/quote'
 import Illustration from '../components/Illustration'
+import { getDemoJobs } from './demo'
 import type { Driver } from '../lib/types'
 
 interface Props {
   driver: Driver
+  demo?: boolean
 }
 
-export default function DriverEarnings({ driver }: Props) {
+export default function DriverEarnings({ driver, demo }: Props) {
   const me = driver.name
-  const done = loadBookings().filter((b) => b.status === 'completed' && b.driverName === me)
+  const all = demo ? getDemoJobs() : loadBookings()
+  const done = all.filter((b) => b.status === 'completed' && b.driverName === me)
   const total = done.reduce((s, b) => s + b.total * 0.85, 0)
 
   return (

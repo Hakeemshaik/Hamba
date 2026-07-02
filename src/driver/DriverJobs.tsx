@@ -3,27 +3,30 @@ import { loadBookings, updateBooking } from '../lib/storage'
 import { formatZar } from '../lib/quote'
 import Icon from '../components/Icon'
 import Illustration from '../components/Illustration'
+import { getDemoJobs, updateDemoJob } from './demo'
 import type { Driver } from '../lib/types'
 
 interface Props {
   driver: Driver
+  demo?: boolean
 }
 
-export default function DriverJobs({ driver }: Props) {
+export default function DriverJobs({ driver, demo }: Props) {
   const me = driver.name
   const [, force] = useState(0)
   const refresh = () => force((n) => n + 1)
 
-  const all = loadBookings()
+  const all = demo ? getDemoJobs() : loadBookings()
+  const doUpdate = demo ? updateDemoJob : updateBooking
   const available = all.filter((b) => b.status === 'upcoming')
   const mine = all.filter((b) => b.status === 'active' && b.driverName === me)
 
   const accept = (id: string) => {
-    updateBooking(id, { status: 'active', driverName: me })
+    doUpdate(id, { status: 'active', driverName: me })
     refresh()
   }
   const complete = (id: string) => {
-    updateBooking(id, { status: 'completed' })
+    doUpdate(id, { status: 'completed' })
     refresh()
   }
 

@@ -13,11 +13,59 @@ const ID_TYPES = ['ID', 'Passport']
 const LICENCE_CODES = ['B', 'EB', 'C1', 'C', 'EC']
 const VEHICLE_TYPES = ['Bakkie', '1-ton', '1.5-ton truck', '4-ton truck', 'Panel van']
 
+type Set = (p: Partial<Driver>) => void
+
+// Field components live at module scope so their identity is stable across
+// renders — defining them inside the screen made React remount the input on
+// every keystroke, dropping focus after each character.
+function Txt(p: { d: Driver; set: Set; label: string; k: keyof Driver; type?: string; mode?: 'tel' | 'email' | 'numeric'; ph?: string }) {
+  return (
+    <label className="glass field-group">
+      <span className="field-label">{p.label}</span>
+      <input
+        className="field-input"
+        type={p.type ?? 'text'}
+        inputMode={p.mode}
+        placeholder={p.ph}
+        value={p.d[p.k] as string}
+        onChange={(e) => p.set({ [p.k]: e.target.value } as Partial<Driver>)}
+      />
+    </label>
+  )
+}
+
+function Doc(p: { d: Driver; set: Set; label: string; k: keyof Driver }) {
+  const onFile = (e: ChangeEvent<HTMLInputElement>) =>
+    p.set({ [p.k]: e.target.files?.[0]?.name ?? '' } as Partial<Driver>)
+  return (
+    <div className="glass field-group docrow">
+      <div className="docrow-text">
+        <div className="field-label">{p.label}</div>
+        <div className={`docstate ${p.d[p.k] ? 'docstate--on' : ''}`}>{(p.d[p.k] as string) || 'No file selected'}</div>
+      </div>
+      <label className="doc-btn">
+        {p.d[p.k] ? 'Replace' : 'Upload'}
+        <input type="file" accept="image/*,.pdf" hidden onChange={onFile} />
+      </label>
+    </div>
+  )
+}
+
+function Check(p: { d: Driver; set: Set; label: string; sub?: string; k: keyof Driver }) {
+  return (
+    <button className="glass check-row" onClick={() => p.set({ [p.k]: !p.d[p.k] } as Partial<Driver>)} aria-pressed={!!p.d[p.k]}>
+      <div className="online-text">
+        <strong>{p.label}</strong>
+        {p.sub && <span>{p.sub}</span>}
+      </div>
+      <span className={`switch ${p.d[p.k] ? 'switch--on' : ''}`} aria-hidden />
+    </button>
+  )
+}
+
 export default function DriverOnboarding({ initial, editing, onSubmit, onExit }: Props) {
   const [d, setD] = useState<Driver>(initial)
-  const set = (p: Partial<Driver>) => setD((prev) => ({ ...prev, ...p }))
-  const file = (key: keyof Driver) => (e: ChangeEvent<HTMLInputElement>) =>
-    set({ [key]: e.target.files?.[0]?.name ?? '' } as Partial<Driver>)
+  const set: Set = (p) => setD((prev) => ({ ...prev, ...p }))
 
   const ready =
     !!d.name && !!d.phone && !!d.idNumber && !!d.docId && !!d.docSelfie && !!d.docAddress &&
@@ -26,43 +74,6 @@ export default function DriverOnboarding({ initial, editing, onSubmit, onExit }:
     !!d.docRegistration && !!d.docDisc && !!d.docRoadworthy && !!d.docInsurance &&
     !!d.docTruckPhoto && !!d.refName && !!d.refPhone && d.trainingAck &&
     !!d.bankHolder && !!d.bankName && !!d.bankAccount
-
-  const Txt = (p: { label: string; k: keyof Driver; type?: string; mode?: 'tel' | 'email' | 'numeric'; ph?: string }) => (
-    <label className="glass field-group">
-      <span className="field-label">{p.label}</span>
-      <input
-        className="field-input"
-        type={p.type ?? 'text'}
-        inputMode={p.mode}
-        placeholder={p.ph}
-        value={d[p.k] as string}
-        onChange={(e) => set({ [p.k]: e.target.value } as Partial<Driver>)}
-      />
-    </label>
-  )
-
-  const Doc = (p: { label: string; k: keyof Driver }) => (
-    <div className="glass field-group docrow">
-      <div className="docrow-text">
-        <div className="field-label">{p.label}</div>
-        <div className={`docstate ${d[p.k] ? 'docstate--on' : ''}`}>{(d[p.k] as string) || 'No file selected'}</div>
-      </div>
-      <label className="doc-btn">
-        {d[p.k] ? 'Replace' : 'Upload'}
-        <input type="file" accept="image/*,.pdf" hidden onChange={file(p.k)} />
-      </label>
-    </div>
-  )
-
-  const Check = (p: { label: string; sub?: string; k: keyof Driver }) => (
-    <button className="glass check-row" onClick={() => set({ [p.k]: !d[p.k] } as Partial<Driver>)} aria-pressed={!!d[p.k]}>
-      <div className="online-text">
-        <strong>{p.label}</strong>
-        {p.sub && <span>{p.sub}</span>}
-      </div>
-      <span className={`switch ${d[p.k] ? 'switch--on' : ''}`} aria-hidden />
-    </button>
-  )
 
   return (
     <div className="screen">
@@ -81,13 +92,13 @@ export default function DriverOnboarding({ initial, editing, onSubmit, onExit }:
             <button key={t} className={`cat-chip ${d.idType === t ? 'cat-chip--on' : ''}`} onClick={() => set({ idType: t })}>{t}</button>
           ))}
         </div>
-        <Txt label={`${d.idType} number`} k="idNumber" mode="numeric" />
-        <Doc label={`${d.idType} document`} k="docId" />
-        <Doc label="Selfie (for identity check)" k="docSelfie" />
-        <Doc label="Proof of address (utility bill / bank statement)" k="docAddress" />
+        <Txt d={d} set={set} label={`${d.idType} number`} k="idNumber" mode="numeric" />
+        <Doc d={d} set={set} label={`${d.idType} document`} k="docId" />
+        <Doc d={d} set={set} label="Selfie (for identity check)" k="docSelfie" />
+        <Doc d={d} set={set} label="Proof of address (utility bill / bank statement)" k="docAddress" />
 
         <p className="group-label">Driver's licence</p>
-        <Txt label="Licence number" k="licenceNumber" />
+        <Txt d={d} set={set} label="Licence number" k="licenceNumber" />
         <div className="cat-wrap">
           {LICENCE_CODES.map((c) => (
             <button key={c} className={`cat-chip ${d.licenceCode === c ? 'cat-chip--on' : ''}`} onClick={() => set({ licenceCode: c })}>Code {c}</button>
@@ -97,12 +108,12 @@ export default function DriverOnboarding({ initial, editing, onSubmit, onExit }:
           <span className="field-label">Licence expiry</span>
           <input className="field-input" type="date" value={d.licenceExpiry} onChange={(e) => set({ licenceExpiry: e.target.value })} />
         </label>
-        <Check label="I have a Professional Driving Permit (PrDP)" sub="Required to carry goods for reward" k="hasPrdp" />
-        {d.hasPrdp && <Doc label="PrDP document" k="docPrdp" />}
+        <Check d={d} set={set} label="I have a Professional Driving Permit (PrDP)" sub="Required to carry goods for reward" k="hasPrdp" />
+        {d.hasPrdp && <Doc d={d} set={set} label="PrDP document" k="docPrdp" />}
 
         <p className="group-label">Checks &amp; consent</p>
-        <Check label="Criminal background check" sub="I consent to a criminal record check (MIE/AFISwitch)" k="criminalConsent" />
-        <Check label="Driving record" sub="I consent to a check of my traffic & accident history" k="drivingConsent" />
+        <Check d={d} set={set} label="Criminal background check" sub="I consent to a criminal record check (MIE/AFISwitch)" k="criminalConsent" />
+        <Check d={d} set={set} label="Driving record" sub="I consent to a check of my traffic & accident history" k="drivingConsent" />
 
         <p className="group-label">Your vehicle</p>
         <div className="cat-wrap">
@@ -110,12 +121,12 @@ export default function DriverOnboarding({ initial, editing, onSubmit, onExit }:
             <button key={t} className={`cat-chip ${d.vehicleType === t ? 'cat-chip--on' : ''}`} onClick={() => set({ vehicleType: t })}>{t}</button>
           ))}
         </div>
-        <Txt label="Make" k="vehicleMake" ph="e.g. Toyota" />
-        <Txt label="Model" k="vehicleModel" ph="e.g. Hi-Ace" />
-        <Txt label="Year" k="vehicleYear" mode="numeric" />
-        <Txt label="Registration / number plate" k="vehicleReg" />
-        <Txt label="Load capacity" k="loadCapacity" ph="e.g. 1 ton / 8 m³" />
-        <Txt label="Load dimensions (optional)" k="vehicleDims" ph="L × W × H" />
+        <Txt d={d} set={set} label="Make" k="vehicleMake" ph="e.g. Toyota" />
+        <Txt d={d} set={set} label="Model" k="vehicleModel" ph="e.g. Hi-Ace" />
+        <Txt d={d} set={set} label="Year" k="vehicleYear" mode="numeric" />
+        <Txt d={d} set={set} label="Registration / number plate" k="vehicleReg" />
+        <Txt d={d} set={set} label="Load capacity" k="loadCapacity" ph="e.g. 1 ton / 8 m³" />
+        <Txt d={d} set={set} label="Load dimensions (optional)" k="vehicleDims" ph="L × W × H" />
         <div className="glass field-group helpers-row">
           <div>
             <div className="field-label">Assistants available</div>
@@ -129,27 +140,27 @@ export default function DriverOnboarding({ initial, editing, onSubmit, onExit }:
         </div>
 
         <p className="group-label">Vehicle documents</p>
-        <Doc label="Vehicle registration papers" k="docRegistration" />
-        <Doc label="Vehicle licence disc" k="docDisc" />
-        <Doc label="Roadworthy certificate" k="docRoadworthy" />
-        <Doc label="Insurance certificate" k="docInsurance" />
-        <Check label="Cover includes commercial / business use" k="commercialCover" />
+        <Doc d={d} set={set} label="Vehicle registration papers" k="docRegistration" />
+        <Doc d={d} set={set} label="Vehicle licence disc" k="docDisc" />
+        <Doc d={d} set={set} label="Roadworthy certificate" k="docRoadworthy" />
+        <Doc d={d} set={set} label="Insurance certificate" k="docInsurance" />
+        <Check d={d} set={set} label="Cover includes commercial / business use" k="commercialCover" />
 
         <p className="group-label">Vehicle photos</p>
-        <Doc label="Photo of your truck/bakkie" k="docTruckPhoto" />
-        <Doc label="Photo of loading equipment (optional)" k="docEquipment" />
+        <Doc d={d} set={set} label="Photo of your truck/bakkie" k="docTruckPhoto" />
+        <Doc d={d} set={set} label="Photo of loading equipment (optional)" k="docEquipment" />
 
         <p className="group-label">Reference</p>
-        <Txt label="Reference name" k="refName" ph="Previous employer or client" />
-        <Txt label="Reference contact number" k="refPhone" type="tel" mode="tel" />
+        <Txt d={d} set={set} label="Reference name" k="refName" ph="Previous employer or client" />
+        <Txt d={d} set={set} label="Reference contact number" k="refPhone" type="tel" mode="tel" />
 
         <p className="group-label">Training</p>
-        <Check label="Safe handling & customer service" sub="I agree to complete Hamba's short driver training" k="trainingAck" />
+        <Check d={d} set={set} label="Safe handling & customer service" sub="I agree to complete Hamba's short driver training" k="trainingAck" />
 
         <p className="group-label">Payout bank account</p>
-        <Txt label="Account holder" k="bankHolder" />
-        <Txt label="Bank" k="bankName" ph="e.g. Capitec" />
-        <Txt label="Account number" k="bankAccount" mode="numeric" />
+        <Txt d={d} set={set} label="Account holder" k="bankHolder" />
+        <Txt d={d} set={set} label="Bank" k="bankName" ph="e.g. Capitec" />
+        <Txt d={d} set={set} label="Account number" k="bankAccount" mode="numeric" />
       </div>
 
       <div className="sticky-cta">

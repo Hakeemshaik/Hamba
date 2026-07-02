@@ -728,6 +728,31 @@ svg { display: block; width: 100%; height: 100%; }
 .check-row { display: flex; align-items: center; gap: 13px; padding: 15px 16px; width: 100%; text-align: left; transition: transform 0.15s; }
 .check-row:active { transform: scale(0.99); }
 
+/* ---------- Demo mode ---------- */
+.demo-bar {
+  position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+  width: min(480px, 100%); z-index: 60;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: calc(var(--safe-top) + 9px) 16px 9px;
+  font-size: 12.5px; font-weight: 600; color: #7a4a00;
+  background: rgba(255, 214, 140, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(122, 74, 0, 0.15);
+}
+.demo-bar button {
+  font-size: 12px; font-weight: 700; color: #7a4a00;
+  padding: 5px 12px; border-radius: 9px;
+  background: rgba(255, 255, 255, 0.55); border: 1px solid rgba(122, 74, 0, 0.2);
+}
+.app-main--demo .screen { padding-top: calc(var(--safe-top) + 62px); }
+
+.demo-link {
+  display: block; margin: 4px auto 0; padding: 10px 16px;
+  font-size: 13.5px; font-weight: 600; color: var(--accent);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
