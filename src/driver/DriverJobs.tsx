@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { loadBookings, updateBooking } from '../lib/storage'
+import { loadBookings, updateBooking, addNotification } from '../lib/storage'
 import { formatZar } from '../lib/quote'
 import Icon from '../components/Icon'
 import Illustration from '../components/Illustration'
@@ -23,6 +23,7 @@ export default function DriverJobs({ driver, demo }: Props) {
 
   const accept = (id: string) => {
     doUpdate(id, { status: 'active', driverName: me })
+    if (!demo) addNotification('Driver assigned', `${me} accepted your booking ${id} and is preparing to head out.`)
     refresh()
   }
   const complete = (id: string) => {

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ProcessingOverlay from './components/ProcessingOverlay'
 import TabBar, { type Tab } from './components/TabBar'
 import SignIn from './screens/SignIn'
@@ -12,19 +12,25 @@ import Activity from './screens/Activity'
 import Help from './screens/Help'
 import ContactUs from './screens/ContactUs'
 import Complaint from './screens/Complaint'
+import Settings from './screens/Settings'
+import Notifications from './screens/Notifications'
 import DriverApp from './driver/DriverApp'
+import { initTheme } from './lib/theme'
 import { DEMO_DRIVER, resetDemoJobs } from './driver/demo'
 import { estimateDistance, calculateQuote } from './lib/quote'
 import { SERVICES, serviceById } from './lib/data'
 import { persistBooking, persistCustomer } from './lib/db'
 import {
   loadProfile, saveProfile, clearAccount, topAddresses, recordAddress,
-  loadRole, saveRole, loadDriver, saveDriver,
+  loadRole, saveRole, loadDriver, saveDriver, addNotification,
 } from './lib/storage'
 import { EMPTY_DRIVER } from './lib/types'
 import type { Booking as BookingT, Customer, Driver, Role, ServiceId } from './lib/types'
 
-type Screen = Tab | 'signin' | 'editProfile' | 'help' | 'contact' | 'complaint' | 'booking' | 'payment'
+type Screen =
+  | Tab
+  | 'signin' | 'editProfile' | 'help' | 'contact' | 'complaint'
+  | 'settings' | 'notifications' | 'booking' | 'payment'
 
 const EMPTY: BookingT = {
   service: null,
@@ -45,6 +51,8 @@ export default function App() {
   const [role, setRole] = useState<Role | null>(() => loadRole())
   const [driver, setDriver] = useState<Driver | null>(() => loadDriver())
   const [demoDriver, setDemoDriver] = useState(false)
+
+  useEffect(() => initTheme(), [])
   const [screen, setScreen] = useState<Screen>('home')
   const [booking, setBooking] = useState<BookingT>(EMPTY)
   const [processing, setProcessing] = useState<string | null>(null)
@@ -78,6 +86,7 @@ export default function App() {
       const c: Customer = { ...basic, address: '' }
       saveProfile(c)
       persistCustomer(c)
+      addNotification('Welcome to Hamba', 'Your account is ready. Book your first move whenever you like.')
       setProfile(c)
       setScreen('home')
     }
@@ -150,6 +159,10 @@ export default function App() {
 
         {screen === 'complaint' && <Complaint onBack={() => setScreen('profile')} />}
 
+        {screen === 'settings' && <Settings onBack={() => setScreen('profile')} />}
+
+        {screen === 'notifications' && <Notifications onBack={() => setScreen('profile')} />}
+
         {screen === 'profile' && (
           <Profile
             profile={profile}
@@ -158,6 +171,8 @@ export default function App() {
             onHelp={() => setScreen('help')}
             onContact={() => setScreen('contact')}
             onComplaint={() => setScreen('complaint')}
+            onNotifications={() => setScreen('notifications')}
+            onSettings={() => setScreen('settings')}
             onLogout={logout}
           />
         )}
@@ -205,6 +220,7 @@ export default function App() {
                 status: 'upcoming',
                 createdAt: Date.now(),
               })
+              addNotification('Booking confirmed', `${svc?.name ?? 'Move'} on ${booking.date || 'TBC'} — we're assigning your driver.`)
               setJustBooked(true)
               setScreen('track')
             }}

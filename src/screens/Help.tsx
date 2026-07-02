@@ -13,7 +13,7 @@ interface Props {
 
 export default function Help({ onBack }: Props) {
   return (
-    <div className="screen">
+    <div className="screen screen--push">
       <div className="topbar">
         <button className="ghost-btn" onClick={onBack} aria-label="Back">
           <Icon name="back" />

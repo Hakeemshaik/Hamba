@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { formatZar } from '../lib/quote'
-import { latestBooking, updateBookingStatus } from '../lib/storage'
+import { latestBooking, updateBooking, updateBookingStatus, addNotification } from '../lib/storage'
 import Icon from '../components/Icon'
 import Illustration from '../components/Illustration'
 import DriverCard from '../components/DriverCard'
@@ -18,7 +18,7 @@ export default function Track({ justBooked, onBook, onHelp }: Props) {
   const [, force] = useState(0)
   const booking = latestBooking()
 
-  if (!booking || booking.status === 'cancelled' || booking.status === 'completed') {
+  if (!booking || booking.status === 'cancelled') {
     return (
       <div className="screen screen--tabbed">
         <div className="app-bar"><span className="wordmark">Track</span></div>
@@ -32,11 +32,45 @@ export default function Track({ justBooked, onBook, onHelp }: Props) {
     )
   }
 
+  if (booking.status === 'completed') {
+    const rate = (stars: number) => {
+      updateBooking(booking.id, { rating: stars })
+      addNotification('Thanks for your rating', `You rated ${booking.serviceName} (${booking.id}) ${stars}/5.`)
+      force((n) => n + 1)
+    }
+    return (
+      <div className="screen screen--tabbed">
+        <div className="app-bar"><span className="wordmark">Track</span></div>
+        {booking.rating ? (
+          <div className="glass trip-empty">
+            <span className="confirm-check confirm-check--small"><Icon name="check" /></span>
+            <h3>Move completed</h3>
+            <p>You rated this move {booking.rating}/5. Thanks — it helps us keep drivers great.</p>
+          </div>
+        ) : (
+          <div className="glass rate-card">
+            <h3>How was your move?</h3>
+            <p>{booking.serviceName} · {booking.pickup} → {booking.dropoff}</p>
+            <div className="rate-row" role="radiogroup" aria-label="Rate your move">
+              {[1, 2, 3, 4, 5].map((n) => (
+                <button key={n} className="rate-star" onClick={() => rate(n)} aria-label={`${n} star${n > 1 ? 's' : ''}`}>
+                  <Icon name="star" />
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        <button className="glass new-trip" onClick={onBook}><Icon name="plus" /> Book another move</button>
+      </div>
+    )
+  }
+
   const done = DONE_AT[booking.status] ?? 1
   const active = booking.status === 'active'
 
   const cancel = () => {
     updateBookingStatus(booking.id, 'cancelled')
+    addNotification('Booking cancelled', `${booking.serviceName} (${booking.id}) was cancelled.`)
     force((n) => n + 1)
   }
 

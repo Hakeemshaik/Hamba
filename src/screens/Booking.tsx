@@ -1,5 +1,6 @@
 import { LOAD_OPTIONS, serviceById } from '../lib/data'
 import { formatZar, calculateQuote } from '../lib/quote'
+import { useCountUp } from '../lib/useCountUp'
 import type { Booking as BookingT, LoadSize } from '../lib/types'
 import Icon from '../components/Icon'
 import StepHeader from '../components/StepHeader'
@@ -16,6 +17,7 @@ interface Props {
 export default function Booking({ booking, update, recents, onBack, onContinue }: Props) {
   const service = serviceById(booking.service)
   const quote = calculateQuote(booking)
+  const animatedTotal = useCountUp(quote.total)
   const today = new Date().toISOString().split('T')[0]
 
   const ready =
@@ -31,7 +33,7 @@ export default function Booking({ booking, update, recents, onBack, onContinue }
   if (!booking.load) missing.push('load size')
 
   return (
-    <div className="screen">
+    <div className="screen screen--push">
       <StepHeader step={1} title={service?.name ?? 'Your move'} onBack={onBack} />
 
       <div className="form-stack">
@@ -138,7 +140,7 @@ export default function Booking({ booking, update, recents, onBack, onContinue }
       <div className="sticky-cta">
         <div className="cta-summary">
           <span>Estimated total</span>
-          <strong>{quote.total ? formatZar(quote.total) : '—'}</strong>
+          <strong>{quote.total ? formatZar(animatedTotal) : '—'}</strong>
         </div>
         <button className="primary-btn" disabled={!ready} onClick={onContinue}>
           {ready ? 'Continue to payment' : `Add ${missing[0]} to continue`}

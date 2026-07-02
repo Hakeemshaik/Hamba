@@ -38,7 +38,7 @@ export default function Payment({ booking, onBack, onPaid, setProcessing }: Prop
   }
 
   return (
-    <div className="screen">
+    <div className="screen screen--push">
       <StepHeader step={2} title="Payment" onBack={onBack} />
 
       <p className="group-label">Order summary</p>

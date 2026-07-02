@@ -27,6 +27,7 @@ export interface BookingRecord {
   method: string
   status: 'upcoming' | 'active' | 'completed' | 'cancelled'
   driverName?: string
+  rating?: number
   createdAt: number
 }
 
@@ -147,6 +148,29 @@ export function saveComplaintLocal(rec: ComplaintRecord): void {
   const list = read<ComplaintRecord[]>(KEY_COMPLAINTS, [])
   list.push(rec)
   write(KEY_COMPLAINTS, list)
+}
+
+export interface NotificationRecord {
+  id: string
+  title: string
+  body: string
+  at: number
+}
+
+const KEY_NOTIFS = 'hamba.notifications.v1'
+
+export function loadNotifications(): NotificationRecord[] {
+  return read<NotificationRecord[]>(KEY_NOTIFS, []).sort((a, b) => b.at - a.at)
+}
+
+export function addNotification(title: string, body: string): void {
+  const list = read<NotificationRecord[]>(KEY_NOTIFS, [])
+  list.push({ id: 'N' + Date.now().toString(36), title, body, at: Date.now() })
+  write(KEY_NOTIFS, list.slice(-30))
+}
+
+export function clearNotifications(): void {
+  write(KEY_NOTIFS, [])
 }
 
 export interface MessageRecord {

@@ -154,6 +154,22 @@ const PATHS: Record<string, JSX.Element> = {
       <path d="m4 7 8 6 8-6" />
     </>
   ),
+  settings: (
+    <>
+      <path d="M4 7h16M4 12h16M4 17h16" />
+      <circle cx="9" cy="7" r="2.1" />
+      <circle cx="15" cy="12" r="2.1" />
+      <circle cx="8" cy="17" r="2.1" />
+    </>
+  ),
+  share: (
+    <>
+      <circle cx="6" cy="12" r="2.4" />
+      <circle cx="17.5" cy="5.8" r="2.4" />
+      <circle cx="17.5" cy="18.2" r="2.4" />
+      <path d="m8.2 10.8 7-3.9M8.2 13.2l7 3.9" />
+    </>
+  ),
   calendar: (
     <>
       <rect x="4" y="5" width="16" height="16" rx="2.5" />

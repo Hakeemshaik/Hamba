@@ -9,14 +9,17 @@ interface Props {
   onHelp: () => void
   onContact: () => void
   onComplaint: () => void
+  onNotifications: () => void
+  onSettings: () => void
   onLogout: () => void
 }
 
-export default function Profile({ profile, onEdit, onActivity, onHelp, onContact, onComplaint, onLogout }: Props) {
+export default function Profile({ profile, onEdit, onActivity, onHelp, onContact, onComplaint, onNotifications, onSettings, onLogout }: Props) {
   const rows = [
     { icon: 'user', label: 'Personal information', go: onEdit },
     { icon: 'list', label: 'My bookings', go: onActivity },
-    { icon: 'card', label: 'Payment methods', go: onEdit },
+    { icon: 'bell', label: 'Notifications', go: onNotifications },
+    { icon: 'settings', label: 'Settings', go: onSettings },
     { icon: 'mail', label: 'Contact us', go: onContact },
     { icon: 'alert', label: 'Report a problem', go: onComplaint },
     { icon: 'help', label: 'Help & support', go: onHelp },

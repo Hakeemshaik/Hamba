@@ -31,7 +31,7 @@ export default function Complaint({ onBack }: Props) {
 
   if (ref) {
     return (
-      <div className="screen">
+      <div className="screen screen--push">
         <div className="topbar">
           <button className="ghost-btn" onClick={onBack} aria-label="Back"><Icon name="back" /></button>
           <span className="topbar-title">Complaint</span>
@@ -50,7 +50,7 @@ export default function Complaint({ onBack }: Props) {
   }
 
   return (
-    <div className="screen">
+    <div className="screen screen--push">
       <div className="topbar">
         <button className="ghost-btn" onClick={onBack} aria-label="Back"><Icon name="back" /></button>
         <span className="topbar-title">Report a problem</span>

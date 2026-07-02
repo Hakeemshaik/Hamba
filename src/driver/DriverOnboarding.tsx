@@ -76,7 +76,7 @@ export default function DriverOnboarding({ initial, editing, onSubmit, onExit }:
     !!d.bankHolder && !!d.bankName && !!d.bankAccount
 
   return (
-    <div className="screen">
+    <div className="screen screen--push">
       <div className="topbar">
         <button className="ghost-btn" onClick={onExit} aria-label="Back"><Icon name="back" /></button>
         <span className="topbar-title">{editing ? 'Edit application' : 'Driver application'}</span>

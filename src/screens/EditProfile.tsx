@@ -14,7 +14,7 @@ export default function EditProfile({ profile, onBack, onSave }: Props) {
   const set = (patch: Partial<Customer>) => setForm((f) => ({ ...f, ...patch }))
 
   return (
-    <div className="screen">
+    <div className="screen screen--push">
       <div className="topbar">
         <button className="ghost-btn" onClick={onBack} aria-label="Back">
           <Icon name="back" />

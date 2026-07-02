@@ -32,11 +32,6 @@ export default function Home({ name, onSelect, onProfile }: Props) {
         Get anything <span className="headline-accent">moved.</span>
       </h1>
 
-      <button className="search-field glass" onClick={() => onSelect(SERVICES[0].id)}>
-        <Icon name="search" />
-        <span>Where are you moving?</span>
-      </button>
-
       <div className="cat-row" role="tablist" aria-label="Service categories">
         {CATEGORIES.map((c) => (
           <button
@@ -64,24 +59,10 @@ export default function Home({ name, onSelect, onProfile }: Props) {
             </span>
             <span className="svc-body">
               <span className="svc-name2">{s.name}</span>
-              <span className="svc-tag2">{s.tagline}</span>
-              <span className="svc-foot">
-                <span className="svc-from">from {formatZar(s.base)}</span>
-                <span className="svc-add" aria-hidden><Icon name="arrow" /></span>
-              </span>
+              <span className="svc-from">from {formatZar(s.base)}</span>
             </span>
           </button>
         ))}
-      </div>
-
-      <hr className="route-divider" />
-
-      <div className="glass referral">
-        <div className="referral-text">
-          <strong>Invite friends, get R50</strong>
-          <span>You both save R50 on your next move.</span>
-        </div>
-        <span className="referral-code">HAMBA50</span>
       </div>
     </div>
   )
