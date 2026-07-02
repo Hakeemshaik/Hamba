@@ -33,12 +33,13 @@ export default function Home({ name, onSelect, onProfile }: Props) {
       </h1>
 
       <div className="cat-row" role="tablist" aria-label="Service categories">
-        {CATEGORIES.map((c) => (
+        {CATEGORIES.map((c, i) => (
           <button
             key={c.id}
             role="tab"
             aria-selected={cat === c.id}
             className={`cat-chip ${cat === c.id ? 'cat-chip--on' : ''}`}
+            style={{ animationDelay: `${80 + i * 50}ms` }}
             onClick={() => setCat(c.id)}
           >
             {c.label}
