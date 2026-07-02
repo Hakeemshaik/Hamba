@@ -1,20 +1,36 @@
 :root {
-  --bg: #eef0f4;
-  --glass: rgba(255, 255, 255, 0.62);
+  /* Warm bone ground — asphalt ink — safety-orange action */
+  --bg: #f3f1ec;
+  --paper: #f3f1ec;
+  --card: #ffffff;
+  --glass: rgba(255, 255, 255, 0.6);
   --glass-strong: rgba(255, 255, 255, 0.82);
-  --stroke: rgba(0, 0, 0, 0.07);
-  --stroke-strong: rgba(0, 0, 0, 0.34);
-  --text: #1c1c1e;
-  --muted: rgba(60, 60, 67, 0.6);
+  --stroke: rgba(24, 22, 18, 0.08);
+  --stroke-strong: rgba(24, 22, 18, 0.4);
+  --line: rgba(24, 22, 18, 0.09);
+  --text: #1b1916;
+  --slate: #5d5952;
+  --muted: rgba(75, 70, 62, 0.72);
   --accent: #ff6a2b;
   --accent-press: #ec5a1d;
   --accent-soft: rgba(255, 106, 43, 0.12);
+  --go: #16855a;
+  --block: #c0392b;
+  --watch: #b7791f;
   --radius: 24px;
   --pad: 20px;
   --maxw: 480px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --font-display: 'Bricolage Grotesque Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Inter, system-ui, sans-serif;
+}
+
+/* Keyboard users get a clear ring; touch users never see it */
+button:focus-visible, a:focus-visible, input:focus-visible,
+textarea:focus-visible, summary:focus-visible, label:focus-visible {
+  outline: 2.5px solid var(--accent);
+  outline-offset: 2px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -74,12 +90,13 @@ svg { display: block; width: 100%; height: 100%; }
   background: var(--glass);
   backdrop-filter: blur(30px) saturate(180%);
   -webkit-backdrop-filter: blur(30px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.72);
   border-radius: var(--radius);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    inset 0 0 0 1px rgba(0, 0, 0, 0.03),
-    0 10px 30px rgba(17, 24, 39, 0.1);
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    inset 0 0 0 1px rgba(24, 22, 18, 0.03),
+    0 2px 6px rgba(27, 25, 22, 0.05),
+    0 14px 34px rgba(27, 25, 22, 0.09);
   position: relative;
 }
 .glass::after {
@@ -107,7 +124,7 @@ svg { display: block; width: 100%; height: 100%; }
 .overlay {
   position: fixed; inset: 0; z-index: 100;
   display: grid; place-items: center;
-  background: rgba(238, 240, 244, 0.55);
+  background: rgba(243, 241, 236, 0.6);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   animation: fade-in 0.3s ease;
@@ -222,20 +239,20 @@ svg { display: block; width: 100%; height: 100%; }
   z-index: 30;
   padding: 16px var(--pad) calc(var(--safe-bottom) + 18px);
   display: flex; flex-direction: column; gap: 10px;
-  background: linear-gradient(to top, var(--bg) 60%, rgba(238, 240, 244, 0));
+  background: linear-gradient(to top, var(--bg) 60%, transparent);
 }
 .cta-summary { display: flex; align-items: baseline; justify-content: space-between; font-size: 14px; color: var(--muted); }
 .cta-summary strong { font-size: 22px; color: var(--text); font-weight: 700; letter-spacing: -0.02em; }
 .primary-btn {
   width: 100%; padding: 16px; border-radius: 17px;
-  font-size: 16px; font-weight: 600; letter-spacing: -0.01em;
+  font-size: 16px; font-weight: 650; letter-spacing: -0.01em;
   color: #fff;
-  background: #111316;
-  box-shadow: 0 8px 24px rgba(17, 19, 22, 0.28);
-  transition: transform 0.2s, opacity 0.2s;
+  background: linear-gradient(160deg, #ff7d44, var(--accent));
+  box-shadow: 0 10px 26px rgba(255, 106, 43, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.32);
+  transition: transform 0.2s, opacity 0.2s, box-shadow 0.2s;
 }
-.primary-btn:active { transform: scale(0.98); }
-.primary-btn:disabled { opacity: 0.3; box-shadow: none; }
+.primary-btn:active { transform: scale(0.98); box-shadow: 0 5px 14px rgba(255, 106, 43, 0.3); }
+.primary-btn:disabled { opacity: 0.35; box-shadow: none; }
 .secure-note { font-size: 12px; color: var(--muted); text-align: center; }
 
 /* ---------- Payment ---------- */
@@ -751,6 +768,62 @@ svg { display: block; width: 100%; height: 100%; }
   display: block; margin: 4px auto 0; padding: 10px 16px;
   font-size: 13.5px; font-weight: 600; color: var(--accent);
   text-decoration: underline; text-underline-offset: 3px;
+}
+
+/* ===================== Brand voice ===================== */
+
+/* Display face on brand moments only — body stays native for legibility */
+.headline, .signin-title, .confirm-title, .wordmark, .logo-word,
+.earn-total-num, .display {
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
+}
+.headline { font-size: clamp(31px, 8.6vw, 38px); font-weight: 780; line-height: 1.04; text-wrap: balance; }
+.signin-title { font-weight: 780; }
+.confirm-title { font-weight: 750; }
+.wordmark, .logo-word { font-weight: 740; }
+
+/* Numbers that line up: every price and stat is tabular */
+.svc-from, .trip-price, .cta-summary strong, .receipt-total strong,
+.receipt-line span:last-child, .earn-total-num, .stat-num,
+.track-sum-total span:last-child {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Route motif — the dashed road line that ties the app to its subject */
+.route-divider {
+  border: none; height: 0; margin: 4px 2px;
+  border-top: 2px dashed rgba(24, 22, 18, 0.13);
+}
+.route-line {
+  background-size: 16px 3px;
+  animation: dash-move 0.9s linear infinite;
+}
+@keyframes dash-move { to { background-position: 16px 0; } }
+
+/* Step progress connectors read as road dashes */
+.progress-step:not(:last-child)::after {
+  width: 18px; height: 0; background: none;
+  border-top: 2px dashed rgba(24, 22, 18, 0.22);
+}
+.progress-step--done:not(:last-child)::after { border-top-color: var(--text); background: none; }
+
+/* Reference codes styled like number plates */
+.ref-chip, .referral-code {
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 12.5px; font-weight: 700; letter-spacing: 0.09em;
+  color: var(--text); background: var(--card);
+  border: 1.5px solid var(--text); border-radius: 8px;
+  padding: 6px 12px;
+}
+
+/* Active tab marker */
+.tab { position: relative; }
+.tab--on::after {
+  content: ''; position: absolute; bottom: 1px; left: 50%;
+  transform: translateX(-50%);
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--accent);
 }
 
 @media (prefers-reduced-motion: reduce) {

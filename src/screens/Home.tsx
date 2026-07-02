@@ -29,7 +29,7 @@ export default function Home({ name, onSelect, onProfile }: Props) {
       </div>
 
       <h1 className="headline">
-        Moving? <span className="headline-accent">Book&nbsp;&amp;&nbsp;go.</span>
+        Get anything <span className="headline-accent">moved.</span>
       </h1>
 
       <button className="search-field glass" onClick={() => onSelect(SERVICES[0].id)}>
@@ -73,6 +73,8 @@ export default function Home({ name, onSelect, onProfile }: Props) {
           </button>
         ))}
       </div>
+
+      <hr className="route-divider" />
 
       <div className="glass referral">
         <div className="referral-text">

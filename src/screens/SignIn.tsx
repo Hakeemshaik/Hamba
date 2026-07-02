@@ -49,6 +49,12 @@ export default function SignIn({ onSignIn, onDemoDriver }: Props) {
         </button>
       </div>
 
+      {isDriver && (
+        <button className="demo-link" onClick={onDemoDriver}>
+          Preview the driver app with sample data
+        </button>
+      )}
+
       <div className="form-stack signin-form">
         <label className="glass field-group">
           <span className="field-label">Full name</span>
@@ -63,12 +69,6 @@ export default function SignIn({ onSignIn, onDemoDriver }: Props) {
           <input className="field-input" type="email" inputMode="email" placeholder="Email address" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
         </label>
       </div>
-
-      {isDriver && (
-        <button className="demo-link" onClick={onDemoDriver}>
-          Preview the driver app with sample data
-        </button>
-      )}
 
       <div className="sticky-cta">
         <p className="secure-note">By continuing you agree to our Terms of Service and Privacy Policy.</p>
