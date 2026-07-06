@@ -1,8 +1,12 @@
-// Thin Supabase REST helper — no SDK dependency. Stays completely dormant
-// until VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY are set, so the app works
-// on local storage alone today and switches to the cloud DB with just keys.
-const URL = import.meta.env.VITE_SUPABASE_URL
-const KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
+// Thin Supabase REST helper — no SDK dependency. The defaults below are the
+// project's PUBLIC anon credentials: they are designed to ship in the frontend
+// bundle (Row Level Security in supabase/schema.sql is what protects data —
+// the anon role can only INSERT, never read others' rows). Env vars override
+// them for staging or a future project swap.
+const URL = import.meta.env.VITE_SUPABASE_URL || 'https://dhzyqvjbknkgweuiothi.supabase.co'
+const KEY =
+  import.meta.env.VITE_SUPABASE_ANON_KEY ||
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRoenlxdmpia25rZ3dldWlvdGhpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMzMzAyMjMsImV4cCI6MjA5ODkwNjIyM30.pCwZ2XPSeH-1FEETRkKnQwXekNPVK4yWi2dN44sxnp4'
 
 export const remoteEnabled = Boolean(URL && KEY)
 
