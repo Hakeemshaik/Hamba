@@ -11,13 +11,15 @@ interface Props {
   onComplaint: () => void
   onNotifications: () => void
   onSettings: () => void
+  onInsurance: () => void
   onLogout: () => void
 }
 
-export default function Profile({ profile, onEdit, onActivity, onHelp, onContact, onComplaint, onNotifications, onSettings, onLogout }: Props) {
+export default function Profile({ profile, onEdit, onActivity, onHelp, onContact, onComplaint, onNotifications, onSettings, onInsurance, onLogout }: Props) {
   const rows = [
     { icon: 'user', label: 'Personal information', go: onEdit },
     { icon: 'list', label: 'My bookings', go: onActivity },
+    { icon: 'shield', label: 'Goods-in-transit insurance', go: onInsurance },
     { icon: 'bell', label: 'Notifications', go: onNotifications },
     { icon: 'settings', label: 'Settings', go: onSettings },
     { icon: 'mail', label: 'Contact us', go: onContact },

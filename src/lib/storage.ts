@@ -173,6 +173,24 @@ export function clearNotifications(): void {
   write(KEY_NOTIFS, [])
 }
 
+export interface InsuranceLead {
+  id: string
+  name: string
+  phone: string
+  email: string
+  bookingRef: string
+  note: string
+  createdAt: number
+}
+
+const KEY_INSURANCE = 'hamba.insurance.v1'
+
+export function saveInsuranceLeadLocal(lead: InsuranceLead): void {
+  const list = read<InsuranceLead[]>(KEY_INSURANCE, [])
+  list.push(lead)
+  write(KEY_INSURANCE, list)
+}
+
 export interface MessageRecord {
   id: string
   name: string

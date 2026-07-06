@@ -83,6 +83,22 @@ create table if not exists complaints (
   created_at  timestamptz not null default now()
 );
 
+-- Insurance quote requests: check this table daily for people to call.
+create table if not exists insurance_leads (
+  id          text primary key,             -- e.g. INS-481204
+  name        text not null,
+  phone       text not null,
+  email       text,
+  booking_ref text,
+  note        text,
+  status      text not null default 'new',  -- new | contacted | closed
+  created_at  timestamptz not null default now()
+);
+
+alter table insurance_leads enable row level security;
+create policy "anon can create insurance leads" on insurance_leads
+  for insert to anon with check (true);
+
 create table if not exists messages (
   id          text primary key,             -- e.g. MSG-481204
   name        text,

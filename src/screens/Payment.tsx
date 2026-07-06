@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { formatZar, calculateQuote } from '../lib/quote'
 import { serviceById, loadById } from '../lib/data'
 import type { Booking, PaymentMethod, Quote } from '../lib/types'
+import Icon from '../components/Icon'
 import Illustration from '../components/Illustration'
 import StepHeader from '../components/StepHeader'
 
@@ -9,6 +10,7 @@ interface Props {
   booking: Booking
   onBack: () => void
   onPaid: (method: PaymentMethod) => void
+  onInsurance: () => void
   setProcessing: (label: string | null) => void
 }
 
@@ -18,7 +20,7 @@ const METHODS: { id: PaymentMethod; label: string; sub: string; icon: string }[]
   { id: 'eft', label: 'Instant EFT', sub: 'Pay from your bank app', icon: 'bank' },
 ]
 
-export default function Payment({ booking, onBack, onPaid, setProcessing }: Props) {
+export default function Payment({ booking, onBack, onPaid, onInsurance, setProcessing }: Props) {
   const [method, setMethod] = useState<PaymentMethod>('tap')
   const quote: Quote = calculateQuote(booking)
   const service = serviceById(booking.service)
@@ -80,6 +82,15 @@ export default function Payment({ booking, onBack, onPaid, setProcessing }: Prop
           </button>
         ))}
       </div>
+
+      <button className="glass insure-card" onClick={onInsurance}>
+        <span className="insure-ico"><Icon name="shield" /></span>
+        <span className="insure-text">
+          <strong>No cover for your goods?</strong>
+          <span>Leave your details — we'll call you with insurance options.</span>
+        </span>
+        <span className="menu-chev"><Icon name="chevron" /></span>
+      </button>
 
       {method === 'tap' && (
         <div className="glass tap-hint">

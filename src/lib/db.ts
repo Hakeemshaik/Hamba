@@ -3,9 +3,11 @@ import {
   loadBookings,
   saveComplaintLocal,
   saveMessageLocal,
+  saveInsuranceLeadLocal,
   type BookingRecord,
   type ComplaintRecord,
   type MessageRecord,
+  type InsuranceLead,
 } from './storage'
 import { remoteInsert } from './supabase'
 import type { Customer, Driver } from './types'
@@ -75,6 +77,19 @@ export function persistDriver(d: Driver): void {
     bank_name: d.bankName,
     bank_account: d.bankAccount,
     status: d.status,
+  })
+}
+
+export function persistInsuranceLead(lead: InsuranceLead): void {
+  saveInsuranceLeadLocal(lead)
+  remoteInsert('insurance_leads', {
+    id: lead.id,
+    name: lead.name,
+    phone: lead.phone,
+    email: lead.email,
+    booking_ref: lead.bookingRef || null,
+    note: lead.note || null,
+    created_at: new Date(lead.createdAt).toISOString(),
   })
 }
 

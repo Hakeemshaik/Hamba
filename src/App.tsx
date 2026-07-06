@@ -14,6 +14,7 @@ import ContactUs from './screens/ContactUs'
 import Complaint from './screens/Complaint'
 import Settings from './screens/Settings'
 import Notifications from './screens/Notifications'
+import Insurance from './screens/Insurance'
 import DriverApp from './driver/DriverApp'
 import { initTheme } from './lib/theme'
 import { DEMO_DRIVER, resetDemoJobs } from './driver/demo'
@@ -30,7 +31,7 @@ import type { Booking as BookingT, Customer, Driver, Role, ServiceId } from './l
 type Screen =
   | Tab
   | 'signin' | 'editProfile' | 'help' | 'contact' | 'complaint'
-  | 'settings' | 'notifications' | 'booking' | 'payment'
+  | 'settings' | 'notifications' | 'insurance' | 'booking' | 'payment'
 
 const EMPTY: BookingT = {
   service: null,
@@ -57,6 +58,7 @@ export default function App() {
   const [booking, setBooking] = useState<BookingT>(EMPTY)
   const [processing, setProcessing] = useState<string | null>(null)
   const [justBooked, setJustBooked] = useState(false)
+  const [insuranceFrom, setInsuranceFrom] = useState<Screen>('profile')
   const [recents, setRecents] = useState<string[]>(() => topAddresses())
 
   const update = (patch: Partial<BookingT>) => {
@@ -163,6 +165,8 @@ export default function App() {
 
         {screen === 'notifications' && <Notifications onBack={() => setScreen('profile')} />}
 
+        {screen === 'insurance' && <Insurance profile={profile} onBack={() => setScreen(insuranceFrom)} />}
+
         {screen === 'profile' && (
           <Profile
             profile={profile}
@@ -173,6 +177,10 @@ export default function App() {
             onComplaint={() => setScreen('complaint')}
             onNotifications={() => setScreen('notifications')}
             onSettings={() => setScreen('settings')}
+            onInsurance={() => {
+              setInsuranceFrom('profile')
+              setScreen('insurance')
+            }}
             onLogout={logout}
           />
         )}
@@ -203,6 +211,10 @@ export default function App() {
           <Payment
             booking={booking}
             onBack={() => setScreen('booking')}
+            onInsurance={() => {
+              setInsuranceFrom('payment')
+              setScreen('insurance')
+            }}
             setProcessing={setProcessing}
             onPaid={(m) => {
               const svc = serviceById(booking.service)
