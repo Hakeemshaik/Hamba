@@ -1094,3 +1094,41 @@ button.glass:active { transform: scale(0.975); }
 .insure-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .insure-text strong { font-size: 14.5px; font-weight: 650; }
 .insure-text span { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
+
+/* ===================== Opening splash ===================== */
+.splash {
+  position: fixed; inset: 0; z-index: 200;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 6px;
+  background: var(--bg);
+  transition: opacity 0.45s ease;
+}
+.splash--hide { opacity: 0; pointer-events: none; }
+
+.splash-logo {
+  filter: drop-shadow(0 18px 30px rgba(255, 106, 43, 0.35));
+  animation: splash-bounce 1.05s cubic-bezier(0.22, 1, 0.36, 1) both;
+  margin-bottom: 12px;
+}
+.splash-logo svg { border-radius: 26px; }
+
+/* Drop in, squash on landing, one hop, settle */
+@keyframes splash-bounce {
+  0% { opacity: 0; transform: translateY(-46vh) scale(0.9); }
+  42% { opacity: 1; transform: translateY(0) scale(1); }
+  55% { transform: translateY(0) scaleX(1.14) scaleY(0.86); }
+  68% { transform: translateY(-26px) scale(1); }
+  82% { transform: translateY(0) scale(1); }
+  90% { transform: scaleX(1.05) scaleY(0.96); }
+  100% { transform: none; }
+}
+
+.splash-word {
+  font-family: var(--font-display);
+  font-size: 32px; font-weight: 780; letter-spacing: -0.02em;
+  animation: rise 0.5s 0.62s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+.splash-tag {
+  font-size: 13px; font-weight: 550; color: var(--muted);
+  animation: rise 0.5s 0.78s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}

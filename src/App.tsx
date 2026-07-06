@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import ProcessingOverlay from './components/ProcessingOverlay'
+import Splash from './components/Splash'
 import TabBar, { type Tab } from './components/TabBar'
 import SignIn from './screens/SignIn'
 import Home from './screens/Home'
@@ -48,6 +49,16 @@ const EMPTY: BookingT = {
 const TAB_SCREENS: Screen[] = ['home', 'track', 'activity', 'profile']
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState(true)
+  return (
+    <>
+      <AppInner />
+      {showSplash && <Splash onDone={() => setShowSplash(false)} />}
+    </>
+  )
+}
+
+function AppInner() {
   const [profile, setProfile] = useState<Customer | null>(() => loadProfile())
   const [role, setRole] = useState<Role | null>(() => loadRole())
   const [driver, setDriver] = useState<Driver | null>(() => loadDriver())
