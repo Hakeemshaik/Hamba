@@ -38,6 +38,18 @@ create policy "anon can create customers" on customers
 create policy "anon can create bookings" on bookings
   for insert to anon with check (true);
 
+-- Cross-device jobs: drivers read open bookings and accept/complete them,
+-- and customers watch their booking's live status. Bookings hold no customer
+-- contact details (suburbs, service, price only). Tighten these to real
+-- per-user auth before scaling beyond the pilot.
+alter table bookings add column if not exists driver_name text;
+
+create policy "anon can read bookings" on bookings
+  for select to anon using (true);
+
+create policy "anon can update booking status" on bookings
+  for update to anon using (true) with check (true);
+
 create table if not exists drivers (
   id               uuid primary key default gen_random_uuid(),
   name             text not null,

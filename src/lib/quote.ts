@@ -1,25 +1,42 @@
 import type { Booking, Quote } from './types'
-import { serviceById, loadById, HELPER_RATE } from './data'
+import { serviceById, loadById, placeByName, HELPER_RATE } from './data'
 
 export function formatZar(amount: number): string {
   return 'R' + Math.round(amount).toLocaleString('en-ZA')
 }
 
 /**
- * Rough distance estimate from two address strings. With no maps API wired up
- * yet we derive a stable, plausible pseudo-distance from the text so the quote
- * feels real during demos. Swap this for a Google/Mapbox Distance Matrix call.
+ * Distance between two picked places. When both match the suburb list this is
+ * real geography: haversine distance × 1.35 road factor. Unknown addresses
+ * fall back to a stable pseudo-distance until a maps API is wired in.
  */
 export function estimateDistance(pickup: string, dropoff: string): number {
-  const text = (pickup + dropoff).toLowerCase().replace(/\s/g, '')
   if (!pickup.trim() || !dropoff.trim()) return 0
+
+  const a = placeByName(pickup)
+  const b = placeByName(dropoff)
+  if (a && b) {
+    const km = haversineKm(a.lat, a.lng, b.lat, b.lng) * 1.35
+    return Math.max(3, Math.round(km))
+  }
+
+  const text = (pickup + dropoff).toLowerCase().replace(/\s/g, '')
   let hash = 0
   for (let i = 0; i < text.length; i++) {
     hash = (hash * 31 + text.charCodeAt(i)) >>> 0
   }
-  // Longer / more different addresses → larger distance, capped sensibly.
   const spread = Math.abs(pickup.length - dropoff.length)
-  return 6 + (hash % 60) + spread * 2
+  return 6 + (hash % 40) + spread
+}
+
+function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const rad = Math.PI / 180
+  const dLat = (lat2 - lat1) * rad
+  const dLng = (lng2 - lng1) * rad
+  const s =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(dLng / 2) ** 2
+  return 2 * 6371 * Math.asin(Math.sqrt(s))
 }
 
 export function calculateQuote(booking: Booking): Quote {

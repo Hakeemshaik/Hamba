@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { formatZar } from '../lib/quote'
 import { latestBooking, updateBooking, updateBookingStatus, addNotification } from '../lib/storage'
+import { fetchBooking, updateBookingRemote } from '../lib/db'
 import Icon from '../components/Icon'
 import Illustration from '../components/Illustration'
 import DriverCard from '../components/DriverCard'
@@ -17,6 +18,33 @@ const DONE_AT: Record<string, number> = { upcoming: 1, active: 3, completed: 5, 
 export default function Track({ justBooked, onBook, onHelp }: Props) {
   const [, force] = useState(0)
   const booking = latestBooking()
+
+  // Watch the cloud: when a driver on another phone accepts or completes
+  // this booking, reflect it here within seconds.
+  const watchId = booking && (booking.status === 'upcoming' || booking.status === 'active') ? booking.id : null
+  useEffect(() => {
+    if (!watchId) return
+    let alive = true
+    const poll = async () => {
+      const remote = await fetchBooking(watchId)
+      if (!alive || !remote) return
+      const current = latestBooking()
+      if (!current || current.id !== watchId) return
+      if (remote.status !== current.status || remote.driverName !== current.driverName) {
+        updateBooking(watchId, { status: remote.status, driverName: remote.driverName })
+        if (remote.driverName && !current.driverName) {
+          addNotification('Driver assigned', `${remote.driverName} accepted your booking and is on the way.`)
+        }
+        force((n) => n + 1)
+      }
+    }
+    poll()
+    const t = window.setInterval(poll, 8000)
+    return () => {
+      alive = false
+      window.clearInterval(t)
+    }
+  }, [watchId])
 
   if (!booking || booking.status === 'cancelled') {
     return (
@@ -70,6 +98,7 @@ export default function Track({ justBooked, onBook, onHelp }: Props) {
 
   const cancel = () => {
     updateBookingStatus(booking.id, 'cancelled')
+    updateBookingRemote(booking.id, { status: 'cancelled' })
     addNotification('Booking cancelled', `${booking.serviceName} (${booking.id}) was cancelled.`)
     force((n) => n + 1)
   }

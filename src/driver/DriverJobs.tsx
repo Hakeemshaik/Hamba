@@ -1,5 +1,6 @@
-import { useState } from 'react'
-import { loadBookings, updateBooking, addNotification } from '../lib/storage'
+import { useEffect, useState } from 'react'
+import { loadBookings, updateBooking, addNotification, type BookingRecord } from '../lib/storage'
+import { fetchOpenJobs, updateBookingRemote } from '../lib/db'
 import { formatZar } from '../lib/quote'
 import Icon from '../components/Icon'
 import Illustration from '../components/Illustration'
@@ -14,22 +15,52 @@ interface Props {
 export default function DriverJobs({ driver, demo }: Props) {
   const me = driver.name
   const [, force] = useState(0)
+  const [cloudJobs, setCloudJobs] = useState<BookingRecord[]>([])
+  const [syncing, setSyncing] = useState(!demo)
   const refresh = () => force((n) => n + 1)
 
-  const all = demo ? getDemoJobs() : loadBookings()
-  const doUpdate = demo ? updateDemoJob : updateBooking
-  const available = all.filter((b) => b.status === 'upcoming')
-  const mine = all.filter((b) => b.status === 'active' && b.driverName === me)
+  // Pull open jobs from the cloud so bookings made on other phones appear.
+  useEffect(() => {
+    if (demo) return
+    let alive = true
+    const pull = async () => {
+      const remote = await fetchOpenJobs()
+      if (alive && remote) setCloudJobs(remote)
+      if (alive) setSyncing(false)
+    }
+    pull()
+    const t = window.setInterval(pull, 10000)
+    return () => {
+      alive = false
+      window.clearInterval(t)
+    }
+  }, [demo])
+
+  const local = demo ? getDemoJobs() : loadBookings()
+  const merged: BookingRecord[] = [...cloudJobs]
+  for (const b of local) {
+    if (!merged.some((m) => m.id === b.id)) merged.push(b)
+  }
+
+  const available = merged.filter((b) => b.status === 'upcoming')
+  const mine = merged.filter((b) => b.status === 'active' && b.driverName === me)
+
+  const doUpdate = (id: string, patch: Partial<BookingRecord>) => {
+    if (demo) {
+      updateDemoJob(id, patch)
+    } else {
+      updateBooking(id, patch)
+      updateBookingRemote(id, { status: patch.status, driverName: patch.driverName })
+      setCloudJobs((jobs) => jobs.map((j) => (j.id === id ? { ...j, ...patch } : j)))
+    }
+    refresh()
+  }
 
   const accept = (id: string) => {
     doUpdate(id, { status: 'active', driverName: me })
-    if (!demo) addNotification('Driver assigned', `${me} accepted your booking ${id} and is preparing to head out.`)
-    refresh()
+    if (!demo) addNotification('Driver assigned', `${me} accepted booking ${id} and is preparing to head out.`)
   }
-  const complete = (id: string) => {
-    doUpdate(id, { status: 'completed' })
-    refresh()
-  }
+  const complete = (id: string) => doUpdate(id, { status: 'completed' })
 
   return (
     <div className="screen screen--tabbed">
@@ -71,7 +102,7 @@ export default function DriverJobs({ driver, demo }: Props) {
       {available.length === 0 ? (
         <div className="glass trip-empty">
           <span className="trip-empty-art truck-anim truck-anim--idle" aria-hidden><Illustration name="truck" /></span>
-          <h3>No jobs available</h3>
+          <h3>{syncing ? 'Checking for jobs…' : 'No jobs available'}</h3>
           <p>New booking requests in your area will appear here.</p>
         </div>
       ) : (

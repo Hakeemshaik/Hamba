@@ -16,6 +16,7 @@ import Complaint from './screens/Complaint'
 import Settings from './screens/Settings'
 import Notifications from './screens/Notifications'
 import Insurance from './screens/Insurance'
+import Legal from './screens/Legal'
 import DriverApp from './driver/DriverApp'
 import { initTheme } from './lib/theme'
 import { DEMO_DRIVER, resetDemoJobs } from './driver/demo'
@@ -32,7 +33,7 @@ import type { Booking as BookingT, Customer, Driver, Role, ServiceId } from './l
 type Screen =
   | Tab
   | 'signin' | 'editProfile' | 'help' | 'contact' | 'complaint'
-  | 'settings' | 'notifications' | 'insurance' | 'booking' | 'payment'
+  | 'settings' | 'notifications' | 'insurance' | 'legal' | 'booking' | 'payment'
 
 const EMPTY: BookingT = {
   service: null,
@@ -70,6 +71,7 @@ function AppInner() {
   const [processing, setProcessing] = useState<string | null>(null)
   const [justBooked, setJustBooked] = useState(false)
   const [insuranceFrom, setInsuranceFrom] = useState<Screen>('profile')
+  const [legalTab, setLegalTab] = useState<'terms' | 'privacy'>('terms')
   const [recents, setRecents] = useState<string[]>(() => topAddresses())
 
   const update = (patch: Partial<BookingT>) => {
@@ -195,7 +197,17 @@ function AppInner() {
 
         {screen === 'complaint' && <Complaint onBack={() => setScreen('profile')} />}
 
-        {screen === 'settings' && <Settings onBack={() => setScreen('profile')} />}
+        {screen === 'settings' && (
+          <Settings
+            onBack={() => setScreen('profile')}
+            onLegal={(tab) => {
+              setLegalTab(tab)
+              setScreen('legal')
+            }}
+          />
+        )}
+
+        {screen === 'legal' && <Legal initialTab={legalTab} onBack={() => setScreen('settings')} />}
 
         {screen === 'notifications' && <Notifications onBack={() => setScreen('profile')} />}
 

@@ -10,6 +10,38 @@ const KEY =
 
 export const remoteEnabled = Boolean(URL && KEY)
 
+export async function remoteSelect<T = Record<string, unknown>>(table: string, query: string): Promise<T[] | null> {
+  if (!remoteEnabled) return null
+  try {
+    const res = await fetch(`${URL}/rest/v1/${table}?${query}`, {
+      headers: { apikey: KEY as string, Authorization: `Bearer ${KEY}` },
+    })
+    if (!res.ok) return null
+    return (await res.json()) as T[]
+  } catch {
+    return null
+  }
+}
+
+export async function remoteUpdate(table: string, query: string, patch: Record<string, unknown>): Promise<boolean> {
+  if (!remoteEnabled) return false
+  try {
+    const res = await fetch(`${URL}/rest/v1/${table}?${query}`, {
+      method: 'PATCH',
+      headers: {
+        apikey: KEY as string,
+        Authorization: `Bearer ${KEY}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal',
+      },
+      body: JSON.stringify(patch),
+    })
+    return res.ok
+  } catch {
+    return false
+  }
+}
+
 export async function remoteInsert(table: string, row: Record<string, unknown>): Promise<void> {
   if (!remoteEnabled) return
   try {

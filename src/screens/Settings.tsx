@@ -4,6 +4,7 @@ import Icon from '../components/Icon'
 
 interface Props {
   onBack: () => void
+  onLegal: (tab: 'terms' | 'privacy') => void
 }
 
 const THEMES: { id: ThemePref; label: string }[] = [
@@ -14,7 +15,7 @@ const THEMES: { id: ThemePref; label: string }[] = [
 
 const KEY_PUSH = 'hamba.pushpref.v1'
 
-export default function Settings({ onBack }: Props) {
+export default function Settings({ onBack, onLegal }: Props) {
   const [theme, setTheme] = useState<ThemePref>(() => getThemePref())
   const [push, setPush] = useState(() => {
     try { return localStorage.getItem(KEY_PUSH) !== 'off' } catch { return true }
@@ -93,8 +94,8 @@ export default function Settings({ onBack }: Props) {
       <div className="glass info-card">
         <div className="info-row"><span>Version</span><span>1.0.0</span></div>
         <div className="info-row"><span>Service area</span><span>Johannesburg</span></div>
-        <a className="info-row info-link" href="#" onClick={(e) => e.preventDefault()}><span>Terms of Service</span><span><Icon name="chevron" /></span></a>
-        <a className="info-row info-link" href="#" onClick={(e) => e.preventDefault()}><span>Privacy Policy</span><span><Icon name="chevron" /></span></a>
+        <button className="info-row info-link" onClick={() => onLegal('terms')}><span>Terms of Service</span><span><Icon name="chevron" /></span></button>
+        <button className="info-row info-link" onClick={() => onLegal('privacy')}><span>Privacy Policy</span><span><Icon name="chevron" /></span></button>
       </div>
     </div>
   )

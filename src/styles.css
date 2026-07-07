@@ -1229,3 +1229,11 @@ button.glass:active { transform: scale(0.975); }
   transition: transform 0.15s;
 }
 .rebook-btn:active { transform: scale(0.98); }
+
+/* ===================== Legal documents ===================== */
+.legal-doc { padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+.legal-updated { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+.legal-doc h3 { font-size: 14.5px; font-weight: 700; letter-spacing: -0.01em; margin-top: 10px; }
+.legal-doc p { font-size: 13.5px; color: var(--slate); line-height: 1.55; }
+.legal-note { margin-top: 12px; padding: 12px 14px; border-radius: 12px; background: rgba(183, 121, 31, 0.1); color: var(--watch) !important; font-weight: 550; }
+.info-link { width: 100%; text-align: left; font-size: inherit; }
