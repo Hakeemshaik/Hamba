@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { LogoMark } from './Logo'
+import Illustration from './Illustration'
 
 /**
  * Opening splash: the logo drops in with a bounce, the wordmark rises,
@@ -24,6 +25,12 @@ export default function Splash({ onDone }: { onDone: () => void }) {
       </div>
       <span className="splash-word">Hamba</span>
       <span className="splash-tag">Moves &amp; Removals</span>
+
+      <div className="splash-road">
+        <span className="splash-truck truck-anim">
+          <Illustration name="truck" />
+        </span>
+      </div>
     </div>
   )
 }

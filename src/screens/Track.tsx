@@ -23,7 +23,7 @@ export default function Track({ justBooked, onBook, onHelp }: Props) {
       <div className="screen screen--tabbed">
         <div className="app-bar"><span className="wordmark">Track</span></div>
         <div className="glass trip-empty">
-          <span className="trip-empty-art" aria-hidden><Illustration name="truck" /></span>
+          <span className="trip-empty-art truck-anim truck-anim--idle" aria-hidden><Illustration name="truck" /></span>
           <h3>{booking?.status === 'cancelled' ? 'Booking cancelled' : 'Nothing on the move'}</h3>
           <p>When you have an active booking, you’ll track your driver here in real time.</p>
         </div>
@@ -97,7 +97,7 @@ export default function Track({ justBooked, onBook, onHelp }: Props) {
         <div className="map-route">
           <span className="pin pin-a"><Icon name="pin" /></span>
           <span className="route-line" />
-          <span className="truck-moving"><Icon name="truck" /></span>
+          <span className="truck-moving truck-anim"><Illustration name="truck" /></span>
           <span className="pin pin-b"><Icon name="pin" /></span>
         </div>
         <div className="map-foot">

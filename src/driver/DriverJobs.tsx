@@ -70,7 +70,7 @@ export default function DriverJobs({ driver, demo }: Props) {
       <p className="group-label">Available now</p>
       {available.length === 0 ? (
         <div className="glass trip-empty">
-          <span className="trip-empty-art" aria-hidden><Illustration name="truck" /></span>
+          <span className="trip-empty-art truck-anim truck-anim--idle" aria-hidden><Illustration name="truck" /></span>
           <h3>No jobs available</h3>
           <p>New booking requests in your area will appear here.</p>
         </div>

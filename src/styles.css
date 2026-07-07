@@ -1132,3 +1132,42 @@ button.glass:active { transform: scale(0.975); }
   font-size: 13px; font-weight: 550; color: var(--muted);
   animation: rise 0.5s 0.78s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
+
+/* ===================== Animated truck ===================== */
+
+/* Wheels spin and the body bobs wherever a truck is wrapped in .truck-anim */
+.truck-anim .wheel {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: wheel-spin 0.8s linear infinite;
+}
+@keyframes wheel-spin { to { transform: rotate(360deg); } }
+.truck-anim .truck-body { animation: truck-bob 0.55s ease-in-out infinite; }
+@keyframes truck-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1.2px); }
+}
+
+/* Slower idle version for empty states */
+.truck-anim--idle .wheel { animation-duration: 2.4s; }
+.truck-anim--idle .truck-body { animation-duration: 1.6s; }
+
+/* Splash: the truck drives across a dashed road under the wordmark */
+.splash-road {
+  position: absolute;
+  left: 0; right: 0; bottom: max(11vh, 72px);
+  height: 64px;
+  border-bottom: 2.5px dashed rgba(24, 22, 18, 0.16);
+  overflow: hidden;
+  pointer-events: none;
+}
+[data-theme='dark'] .splash-road { border-bottom-color: rgba(255, 255, 255, 0.16); }
+.splash-truck {
+  position: absolute; bottom: -3px; left: 0;
+  width: 62px; height: 62px;
+  animation: drive-across 1.75s 0.15s cubic-bezier(0.45, 0, 0.3, 1) both;
+}
+@keyframes drive-across {
+  from { transform: translateX(-90px); }
+  to { transform: translateX(calc(100vw + 30px)); }
+}

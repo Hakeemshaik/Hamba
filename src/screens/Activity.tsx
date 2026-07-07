@@ -25,7 +25,7 @@ export default function Activity({ onNew }: Props) {
 
       {trips.length === 0 ? (
         <div className="glass trip-empty">
-          <span className="trip-empty-art" aria-hidden><Illustration name="truck" /></span>
+          <span className="trip-empty-art truck-anim truck-anim--idle" aria-hidden><Illustration name="truck" /></span>
           <h3>No trips yet</h3>
           <p>Your bookings and their status will show up here once you make your first one.</p>
         </div>

@@ -9,18 +9,27 @@ interface Props {
  * load instantly and never break offline.
  */
 const ART: Record<string, JSX.Element> = {
-  // Long distance move — a moving van
+  // Long distance move — a moving van. Wheels carry spokes in a .wheel group
+  // so contexts wrapped in .truck-anim can spin them via CSS.
   truck: (
     <g>
       <ellipse cx="32" cy="52" rx="24" ry="3.4" fill="#000" opacity="0.06" />
-      <rect x="6" y="20" width="30" height="24" rx="4" fill="#ffffff" stroke="#d7dee8" strokeWidth="1.5" />
-      <path d="M36 26h11.5c1 0 1.9.5 2.5 1.3L56 35v8a2 2 0 0 1-2 2H36V26Z" fill="#3b82f6" />
-      <rect x="39" y="29" width="11" height="7" rx="1.5" fill="#bfdbfe" />
-      <rect x="6" y="33" width="30" height="3.5" fill="#eef2f7" />
-      <circle cx="18" cy="46" r="5" fill="#1f2937" />
-      <circle cx="18" cy="46" r="2" fill="#9ca3af" />
-      <circle cx="46" cy="46" r="5" fill="#1f2937" />
-      <circle cx="46" cy="46" r="2" fill="#9ca3af" />
+      <g className="truck-body">
+        <rect x="6" y="20" width="30" height="24" rx="4" fill="#ffffff" stroke="#d7dee8" strokeWidth="1.5" />
+        <path d="M36 26h11.5c1 0 1.9.5 2.5 1.3L56 35v8a2 2 0 0 1-2 2H36V26Z" fill="#3b82f6" />
+        <rect x="39" y="29" width="11" height="7" rx="1.5" fill="#bfdbfe" />
+        <rect x="6" y="33" width="30" height="3.5" fill="#eef2f7" />
+      </g>
+      <g className="wheel">
+        <circle cx="18" cy="46" r="5" fill="#1f2937" />
+        <path d="M18 42.6v6.8M14.6 46h6.8" stroke="#9ca3af" strokeWidth="1.4" />
+        <circle cx="18" cy="46" r="1.4" fill="#e5e7eb" />
+      </g>
+      <g className="wheel">
+        <circle cx="46" cy="46" r="5" fill="#1f2937" />
+        <path d="M46 42.6v6.8M42.6 46h6.8" stroke="#9ca3af" strokeWidth="1.4" />
+        <circle cx="46" cy="46" r="1.4" fill="#e5e7eb" />
+      </g>
     </g>
   ),
   // Local removal — stacked boxes
