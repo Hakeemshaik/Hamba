@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { LOAD_OPTIONS, serviceById } from '../lib/data'
 import { formatZar, calculateQuote } from '../lib/quote'
 import { useCountUp } from '../lib/useCountUp'
@@ -18,7 +19,13 @@ export default function Booking({ booking, update, recents, onBack, onContinue }
   const service = serviceById(booking.service)
   const quote = calculateQuote(booking)
   const animatedTotal = useCountUp(quote.total)
+  const [showBreakdown, setShowBreakdown] = useState(false)
   const today = new Date().toISOString().split('T')[0]
+
+  const asap = booking.time === 'ASAP'
+  const routeSet = !!booking.pickup.trim() && !!booking.dropoff.trim() && booking.distanceKm > 0
+  // Upfront price per load size, Uber vehicle-class style.
+  const priceFor = (load: LoadSize) => calculateQuote({ ...booking, load }).total
 
   const ready =
     !!booking.pickup.trim() &&
@@ -56,28 +63,46 @@ export default function Booking({ booking, update, recents, onBack, onContinue }
         />
 
         <p className="group-label">When</p>
-        <div className="glass field-group row2">
-          <label className="field">
-            <span className="field-label">Date</span>
-            <input
-              className="field-input"
-              type="date"
-              min={today}
-              value={booking.date}
-              onChange={(e) => update({ date: e.target.value })}
-            />
-          </label>
-          <div className="field-divider field-divider--v" />
-          <label className="field">
-            <span className="field-label">Time</span>
-            <input
-              className="field-input"
-              type="time"
-              value={booking.time}
-              onChange={(e) => update({ time: e.target.value })}
-            />
-          </label>
+        <div className="cat-wrap">
+          <button
+            className={`cat-chip ${asap ? 'cat-chip--on' : ''}`}
+            onClick={() => update({ date: today, time: 'ASAP' })}
+            aria-pressed={asap}
+          >
+            As soon as possible
+          </button>
+          <button
+            className={`cat-chip ${!asap && booking.date ? 'cat-chip--on' : ''}`}
+            onClick={() => update({ date: '', time: '' })}
+            aria-pressed={!asap && !!booking.date}
+          >
+            Schedule
+          </button>
         </div>
+        {!asap && (
+          <div className="glass field-group row2">
+            <label className="field">
+              <span className="field-label">Date</span>
+              <input
+                className="field-input"
+                type="date"
+                min={today}
+                value={booking.date}
+                onChange={(e) => update({ date: e.target.value })}
+              />
+            </label>
+            <div className="field-divider field-divider--v" />
+            <label className="field">
+              <span className="field-label">Time</span>
+              <input
+                className="field-input"
+                type="time"
+                value={booking.time}
+                onChange={(e) => update({ time: e.target.value })}
+              />
+            </label>
+          </div>
+        )}
 
         <p className="group-label">What are we moving?</p>
         <div className="load-grid">
@@ -97,6 +122,7 @@ export default function Booking({ booking, update, recents, onBack, onContinue }
                 )}
               </span>
               <span className="load-detail">{l.detail}</span>
+              {routeSet && <span className="load-price">{formatZar(priceFor(l.id as LoadSize))}</span>}
             </button>
           ))}
         </div>
@@ -138,10 +164,23 @@ export default function Booking({ booking, update, recents, onBack, onContinue }
       </div>
 
       <div className="sticky-cta">
-        <div className="cta-summary">
-          <span>Estimated total</span>
+        {showBreakdown && quote.total > 0 && (
+          <div className="glass breakdown">
+            <div className="breakdown-row"><span>Call-out</span><span>{formatZar(quote.base)}</span></div>
+            <div className="breakdown-row"><span>Distance · ~{Math.round(booking.distanceKm)} km</span><span>{formatZar(quote.distance)}</span></div>
+            {quote.loadAdjustment > 0 && <div className="breakdown-row"><span>Load size</span><span>{formatZar(quote.loadAdjustment)}</span></div>}
+            {quote.helpers > 0 && <div className="breakdown-row"><span>Helpers ({booking.helpers})</span><span>{formatZar(quote.helpers)}</span></div>}
+          </div>
+        )}
+        <button
+          className="cta-summary cta-summary--tap"
+          onClick={() => setShowBreakdown((v) => !v)}
+          disabled={!quote.total}
+          aria-expanded={showBreakdown}
+        >
+          <span>Estimated total {quote.total > 0 && <em className="cta-hint">{showBreakdown ? 'hide' : 'see'} breakdown</em>}</span>
           <strong>{quote.total ? formatZar(animatedTotal) : '—'}</strong>
-        </div>
+        </button>
         <button className="primary-btn" disabled={!ready} onClick={onContinue}>
           {ready ? 'Continue to payment' : `Add ${missing[0]} to continue`}
         </button>

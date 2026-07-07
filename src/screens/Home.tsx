@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { SERVICES, CATEGORIES } from '../lib/data'
 import { formatZar } from '../lib/quote'
+import { loadBookings } from '../lib/storage'
 import type { ServiceId } from '../lib/types'
 import Icon from '../components/Icon'
 import Illustration from '../components/Illustration'
@@ -8,13 +9,24 @@ import Illustration from '../components/Illustration'
 interface Props {
   name: string
   onSelect: (id: ServiceId) => void
+  onWhereTo: () => void
+  onRoute: (pickup: string, dropoff: string) => void
   onProfile: () => void
 }
 
-export default function Home({ name, onSelect, onProfile }: Props) {
+export default function Home({ name, onSelect, onWhereTo, onRoute, onProfile }: Props) {
   const [cat, setCat] = useState('all')
   const firstName = name.trim().split(' ')[0] || 'there'
   const shown = SERVICES.filter((s) => cat === 'all' || s.category === cat)
+
+  // Last two distinct routes, Uber-style one-tap recents.
+  const recents: { pickup: string; dropoff: string }[] = []
+  for (const b of loadBookings()) {
+    if (!b.pickup || !b.dropoff) continue
+    if (recents.some((r) => r.pickup === b.pickup && r.dropoff === b.dropoff)) continue
+    recents.push({ pickup: b.pickup, dropoff: b.dropoff })
+    if (recents.length === 2) break
+  }
 
   return (
     <div className="screen screen--tabbed">
@@ -31,6 +43,23 @@ export default function Home({ name, onSelect, onProfile }: Props) {
       <h1 className="headline">
         Get anything <span className="headline-accent">moved.</span>
       </h1>
+
+      <button className="glass whereto" onClick={onWhereTo}>
+        <span className="whereto-dot" aria-hidden />
+        <span className="whereto-text">Where to?</span>
+        <span className="whereto-go" aria-hidden><Icon name="arrow" /></span>
+      </button>
+
+      {recents.length > 0 && (
+        <div className="recents-row">
+          {recents.map((r) => (
+            <button key={r.pickup + r.dropoff} className="recent-chip" onClick={() => onRoute(r.pickup, r.dropoff)}>
+              <Icon name="clock" />
+              {r.pickup} → {r.dropoff}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="cat-row" role="tablist" aria-label="Service categories">
         {CATEGORIES.map((c, i) => (

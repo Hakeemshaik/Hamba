@@ -1171,3 +1171,61 @@ button.glass:active { transform: scale(0.975); }
   from { transform: translateX(-90px); }
   to { transform: translateX(calc(100vw + 30px)); }
 }
+
+/* ===================== Patterns from the best apps ===================== */
+
+/* Uber-style "Where to?" entry */
+.whereto {
+  display: flex; align-items: center; gap: 13px;
+  padding: 17px 18px; width: 100%; text-align: left;
+  border-radius: 20px;
+}
+.whereto-dot {
+  width: 11px; height: 11px; border-radius: 50%; flex: none;
+  background: var(--accent);
+  box-shadow: 0 0 0 5px var(--accent-soft);
+}
+.whereto-text { flex: 1; font-size: 17px; font-weight: 650; letter-spacing: -0.01em; }
+.whereto-go {
+  width: 34px; height: 34px; border-radius: 12px; flex: none;
+  display: grid; place-items: center; padding: 8px;
+  color: #fff; background: var(--text);
+}
+[data-theme='dark'] .whereto-go { color: var(--bg); }
+
+/* One-tap recent routes */
+.recents-row { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: -6px calc(-1 * var(--pad)) 0; padding: 2px var(--pad); }
+.recents-row::-webkit-scrollbar { display: none; }
+.recent-chip {
+  flex: none; display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 13px; border-radius: 12px;
+  font-size: 12.5px; font-weight: 600; color: var(--slate);
+  background: var(--card); border: 1px solid var(--line);
+  max-width: 260px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  animation: chip-in 0.4s 0.15s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+.recent-chip svg { width: 14px; height: 14px; flex: none; color: var(--muted); }
+
+/* Upfront price on each load option */
+.load-price {
+  font-size: 14.5px; font-weight: 700; color: var(--accent);
+  font-variant-numeric: tabular-nums; margin-top: 4px;
+}
+
+/* Expandable price breakdown above the CTA */
+.breakdown { padding: 6px 16px; margin-bottom: 2px; animation: suggest-in 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+.breakdown-row { display: flex; justify-content: space-between; gap: 14px; padding: 9px 0; font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--line); }
+.breakdown-row:last-child { border-bottom: none; }
+.breakdown-row span:last-child { color: var(--text); font-weight: 550; font-variant-numeric: tabular-nums; }
+.cta-summary--tap { width: 100%; text-align: left; }
+.cta-summary--tap:disabled { opacity: 1; }
+.cta-hint { font-style: normal; font-size: 11.5px; color: var(--accent); font-weight: 650; margin-left: 6px; }
+
+/* One-tap rebook on past trips */
+.rebook-btn {
+  margin-top: 10px; width: 100%; padding: 10px;
+  border-radius: 12px; font-size: 13.5px; font-weight: 650;
+  color: var(--text); background: var(--fill);
+  transition: transform 0.15s;
+}
+.rebook-btn:active { transform: scale(0.98); }

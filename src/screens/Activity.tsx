@@ -1,10 +1,12 @@
 import { formatZar } from '../lib/quote'
 import { loadBookings } from '../lib/db'
+import type { BookingRecord } from '../lib/storage'
 import Illustration from '../components/Illustration'
 import Icon from '../components/Icon'
 
 interface Props {
   onNew: () => void
+  onRebook: (b: BookingRecord) => void
 }
 
 const STATUS_LABEL: Record<string, string> = {
@@ -14,7 +16,7 @@ const STATUS_LABEL: Record<string, string> = {
   cancelled: 'Cancelled',
 }
 
-export default function Activity({ onNew }: Props) {
+export default function Activity({ onNew, onRebook }: Props) {
   const trips = loadBookings()
 
   return (
@@ -48,6 +50,11 @@ export default function Activity({ onNew }: Props) {
                   <span>{b.date || 'Date TBC'}{b.time ? ` · ${b.time}` : ''} · {b.id}</span>
                   <span className="trip-price">{formatZar(b.total)}</span>
                 </div>
+                {(b.status === 'completed' || b.status === 'cancelled') && (
+                  <button className="rebook-btn" onClick={() => onRebook(b)}>
+                    Book again
+                  </button>
+                )}
               </div>
             </div>
           ))}

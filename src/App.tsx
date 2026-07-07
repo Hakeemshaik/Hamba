@@ -88,6 +88,16 @@ function AppInner() {
     setScreen('booking')
   }
 
+  // Uber-style entry points: "Where to?", recent routes and one-tap rebook
+  // land in the booking flow with details already filled in.
+  const startBookingWith = (patch: Partial<BookingT>) => {
+    setJustBooked(false)
+    const next = { ...EMPTY, service: 'local-move' as ServiceId, ...patch }
+    if (next.pickup && next.dropoff) next.distanceKm = estimateDistance(next.pickup, next.dropoff)
+    setBooking(next)
+    setScreen('booking')
+  }
+
   const signIn = (r: Role, basic: { name: string; phone: string; email: string }) => {
     saveRole(r)
     setRole(r)
@@ -153,7 +163,13 @@ function AppInner() {
 
       <main className="app-main">
         {screen === 'home' && (
-          <Home name={profile.name} onSelect={startBooking} onProfile={() => setScreen('profile')} />
+          <Home
+            name={profile.name}
+            onSelect={startBooking}
+            onWhereTo={() => startBookingWith({})}
+            onRoute={(pickup, dropoff) => startBookingWith({ pickup, dropoff })}
+            onProfile={() => setScreen('profile')}
+          />
         )}
 
         {screen === 'track' && (
@@ -164,7 +180,14 @@ function AppInner() {
           />
         )}
 
-        {screen === 'activity' && <Activity onNew={() => startBooking(SERVICES[0].id)} />}
+        {screen === 'activity' && (
+          <Activity
+            onNew={() => startBooking(SERVICES[0].id)}
+            onRebook={(b) =>
+              startBookingWith({ service: b.serviceId as ServiceId, pickup: b.pickup, dropoff: b.dropoff })
+            }
+          />
+        )}
 
         {screen === 'help' && <Help onBack={() => setScreen('profile')} />}
 
