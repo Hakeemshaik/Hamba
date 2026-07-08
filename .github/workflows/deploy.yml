@@ -37,6 +37,15 @@ jobs:
       # base_path comes from configure-pages (e.g. /Hamba/) so assets resolve.
       - run: npm run build -- --base="${{ steps.pages.outputs.base_path }}/"
 
+      # Call Analyser lives at <base_path>/calls/ on the same Pages site.
+      - name: Build Call Analyser
+        if: ${{ hashFiles('call-analyser/package.json') != '' }}
+        run: |
+          npm ci --prefix call-analyser
+          npm run build --prefix call-analyser -- --base="${{ steps.pages.outputs.base_path }}/calls/"
+          mkdir -p dist/calls
+          cp -r call-analyser/dist/* dist/calls/
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
